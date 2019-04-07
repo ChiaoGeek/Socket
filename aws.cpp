@@ -94,11 +94,11 @@ int main()
             cerr << "there was a connection issue" << endl;
             break;
         }
-        if (bytesRecv == 0)
-        {
-            cout << "the client disconnected" << endl;
-            break;
-        }
+//        if (bytesRecv == 0)
+//        {
+//            cout << "the client disconnected" << endl;
+//            break;
+//        }
         //display the message;
         cout << "received: " << string(buf, 0, bytesRecv) << endl;
         //resent the message;
