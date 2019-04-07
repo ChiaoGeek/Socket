@@ -39,16 +39,14 @@ int main()
         cerr << "Can't bind to IP/port";
         return -2;
     }
-
-    //make a socket for listening
-    if (listen(listening, SOMAXCONN) == -1)  //max # 128
-    {
-        cerr << "Can't listen!";
-        return -3;
-    }
-    //accept a call
-
     for (;;) {
+        //make a socket for listening
+        if (listen(listening, SOMAXCONN) == -1)  //max # 128
+        {
+            cerr << "Can't listen!";
+            return -3;
+        }
+        //accept a call
 
         sockaddr_in client;
         socklen_t clientSize = sizeof(client);
@@ -84,18 +82,19 @@ int main()
 
             memset(buf, 0, 4096);
             //wait for a message;
-            while(true) {
-                int bytesRecv = recv(clientSocket, buf, 4096, 0);
-                if (bytesRecv > 0) {
-                    cout << "received: " << string(buf, 0, bytesRecv) << endl;
-                    //resent the message;
-                    send(clientSocket, buf, bytesRecv + 1, 0);
-                }
+
+            int bytesRecv = recv(clientSocket, buf, 4096, 0);
+            if (bytesRecv > 0) {
+                cout << "received: " << string(buf, 0, bytesRecv) << endl;
+                //resent the message;
+                send(clientSocket, buf, bytesRecv + 1, 0);
+                close(clientSocket);
+            }
 //                else {
 //                    close(clientSocket);
 //                    break;
 //                }
-            }
+
 
         }
 
