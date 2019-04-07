@@ -52,42 +52,41 @@ int main()
     char host[NI_MAXHOST];
     char svc[NI_MAXSERV];
     cout << "test" << endl;
-
-    int clientSocket = accept(listening, (sockaddr *)&client, &clientSize);
-
-    if (clientSocket == -1) // clientSocket is a new socket
-    {
-        cerr << "problem with client connecting!";
-        return -4;
-    }
-    //close the listening socket
-    close(listening);
-
-    memset(host, 0, NI_MAXHOST);  //clean up the zombie
-    memset(svc, 0, NI_MAXSERV);
-    // The getnameinfo() function is the inverse of getaddrinfo(3):
-    // it converts a socket address to a corresponding host and service,
-    // in a protocol-independent manner. It combines the functionality of gethostbyaddr(3)
-    // and getservbyport(3), but unlike those functions, getnameinfo() is reentrant
-    // and allows programs to eliminate IPv4-versus-IPv6 dependencies.
-    int result = getnameinfo((sockaddr *)&client,
-                             sizeof(client), host, NI_MAXHOST,
-                             svc, NI_MAXSERV, 0);
-    if (result)
-    {   // ****suppose the svc is the port of client
-        cout << host << "connected on " << svc << endl;
-    }
-    else
-    {
-        inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
-        cout << host <<" connected on " << ntohs(client.sin_port) << endl;
-    }
-    //while receiving display message, echo message
-    char buf[4096];
-
     for (;;) {
+        int clientSocket = accept(listening, (sockaddr *)&client, &clientSize);
+
+        if (clientSocket == -1) // clientSocket is a new socket
+        {
+            cerr << "problem with client connecting!";
+            return -4;
+        }
+        //close the listening socket
+        close(listening);
+
+        memset(host, 0, NI_MAXHOST);  //clean up the zombie
+        memset(svc, 0, NI_MAXSERV);
+        // The getnameinfo() function is the inverse of getaddrinfo(3):
+        // it converts a socket address to a corresponding host and service,
+        // in a protocol-independent manner. It combines the functionality of gethostbyaddr(3)
+        // and getservbyport(3), but unlike those functions, getnameinfo() is reentrant
+        // and allows programs to eliminate IPv4-versus-IPv6 dependencies.
+        int result = getnameinfo((sockaddr *)&client,
+                                 sizeof(client), host, NI_MAXHOST,
+                                 svc, NI_MAXSERV, 0);
+        if (result)
+        {   // ****suppose the svc is the port of client
+            cout << host << "connected on " << svc << endl;
+        }
+        else
+        {
+            inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
+            cout << host <<" connected on " << ntohs(client.sin_port) << endl;
+        }
+        //while receiving display message, echo message
+        char buf[4096];
+
+
         memset(buf, 0, 4096);
-        
              //wait for a message;
         int bytesRecv = recv(clientSocket, buf, 4096, 0);
         if (bytesRecv > 0) {
