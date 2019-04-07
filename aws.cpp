@@ -52,6 +52,7 @@ int main()
     char host[NI_MAXHOST];
     char svc[NI_MAXSERV];
     cout << "test" << endl;
+
     int clientSocket = accept(listening, (sockaddr *)&client, &clientSize);
 
     if (clientSocket == -1) // clientSocket is a new socket
@@ -86,7 +87,8 @@ int main()
 
     for (;;) {
         memset(buf, 0, 4096);
-        //wait for a message;
+        cout << "t" << endl;
+             //wait for a message;
         int bytesRecv = recv(clientSocket, buf, 4096, 0);
         if (bytesRecv > 0) {
             cout << "received: " << string(buf, 0, bytesRecv) << endl;
@@ -96,6 +98,6 @@ int main()
     }
 
     //close socket
-    close(clientSocket);
+//    close(clientSocket);
 
 }
