@@ -9,7 +9,7 @@
 
 using namespace std;
 
-int main()
+int startClient()
 {
     //creat a socket
     int sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -67,4 +67,9 @@ int main()
     //close the socket
 
     close(sock);
+}
+
+int main(int argc, char** argv) {
+    count << "The client is up and running" << endl;
+
 }
