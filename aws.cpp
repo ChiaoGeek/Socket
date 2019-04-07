@@ -47,12 +47,14 @@ int main()
         return -3;
     }
     //accept a call
-    sockaddr_in client;
-    socklen_t clientSize = sizeof(client);
-    char host[NI_MAXHOST];
-    char svc[NI_MAXSERV];
-    cout << "test" << endl;
+
     for (;;) {
+        
+        sockaddr_in client;
+        socklen_t clientSize = sizeof(client);
+        char host[NI_MAXHOST];
+        char svc[NI_MAXSERV];
+        cout << "test" << endl;
         int clientSocket = accept(listening, (sockaddr *)&client, &clientSize);
 
         if (clientSocket != -1) // clientSocket is a new socket
