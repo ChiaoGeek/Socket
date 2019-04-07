@@ -90,6 +90,9 @@ int main()
                 send(clientSocket, buf, bytesRecv + 1, 0);
             }
 
+        }else {
+            cout << "lose connection" << endl;
+            //resent the message;
         }
         //close the listening socket
 
