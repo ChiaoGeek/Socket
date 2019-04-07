@@ -9,7 +9,7 @@
 
 using namespace std;
 
-int startClient()
+int startClient(string arg)
 {
     //creat a socket
     int sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -36,40 +36,46 @@ int startClient()
 
     //while loop
     char buf[4096];
-    string userInput;
 
-    do{
-        //enter lines of text
-        cout << ">";
-        getline(cin, userInput);
-        //send to server
-        int sendRes = send(sock, userInput.c_str(), userInput.size() + 1, 0);
-        if(sendRes == -1)
-        {
-            cout << "could not send to server!";
-            continue;
-        }
+    //send to server
+    int sendRes = send(sock, arg.c_str(), arg.size() + 1, 0);
+    if(sendRes == -1)
+    {
+        cout << "could not send to server!";
+        continue;
+    }
 
-        //wait for response
-        memset(buf, 0, 4096);
-        int bytesReceived = recv(sock, buf, 4096, 0);
-        if (bytesReceived == -1)
-        {
-            cout << "there was an error getting from the server\r\n";
-        }
-        else
-        {
-            //display response
-            cout << "server> " << string(buf, bytesReceived) << "\r\n";
-        }
+    //wait for response
+    memset(buf, 0, 4096);
+    int bytesReceived = recv(sock, buf, 4096, 0);
+    if (bytesReceived == -1)
+    {
+        cout << "there was an error getting from the server\r\n";
+    }
+    else
+    {
+        //display response
+        cout << "server> " << string(buf, bytesReceived) << "\r\n";
+    }
 
-    } while(true);
     //close the socket
 
     close(sock);
 }
 
 int main(int argc, char** argv) {
-    count << "The client is up and running" << endl;
-
+    cout << "The client is up and running" << endl;
+    string arguments = "";
+    if(argc == 6 || argc == 5) {
+        for(int i = 1; i < argc; i++) {
+            arguments += argv[i];
+            if(i != argc - 1) {
+                arguments += " ";
+            }
+        }
+        startClient(arguments)
+//        cout << arguments << endl;
+    }else {
+        cout << "Arguments error" << endl;
+    }
 }
