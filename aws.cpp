@@ -88,13 +88,11 @@ int main()
                 cout << "received: " << string(buf, 0, bytesRecv) << endl;
                 //resent the message;
                 send(clientSocket, buf, bytesRecv + 1, 0);
-            }else {
-                close(clientSocket);
             }
 
         }
         //close the listening socket
-        
+
     }
 
     //close socket
