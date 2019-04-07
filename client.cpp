@@ -9,13 +9,13 @@
 
 using namespace std;
 
-int startClient(string arg)
+void startClient(string arg)
 {
     //creat a socket
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if(sock == -1)
     {
-        return 1;
+        return;
     }
 
     //creat a hint structure for the server we re connecting with
@@ -31,7 +31,7 @@ int startClient(string arg)
     int connectRes = connect(sock, (sockaddr *)&hint, sizeof(hint));
     if(connectRes == -1)
     {
-        return 1;
+        return;
     }
 
     //while loop
@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
                 arguments += " ";
             }
         }
-        startClient(arguments)
+        startClient(arguments);
 //        cout << arguments << endl;
     }else {
         cout << "Arguments error" << endl;
