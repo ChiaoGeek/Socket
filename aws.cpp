@@ -11,7 +11,7 @@ using namespace std;
 
 int main()
 {
-    for (;;) {
+
     //creat a socket
     int listening = socket(AF_INET, SOCK_STREAM, 0);
     if(listening == -1)
@@ -48,53 +48,53 @@ int main()
             socklen_t clientSize = sizeof(client);
             char host[NI_MAXHOST];
             char svc[NI_MAXSERV];
+            for (;;) {
+                int clientSocket = accept(listening, (sockaddr *)&client, &clientSize);
 
-            int clientSocket = accept(listening, (sockaddr *)&client, &clientSize);
-
-            if (clientSocket != -1) // clientSocket is a new socket
-            {
-                close(listening);
-                memset(host, 0, NI_MAXHOST);  //clean up the zombie
-                memset(svc, 0, NI_MAXSERV);
-                // The getnameinfo() function is the inverse of getaddrinfo(3):
-                // it converts a socket address to a corresponding host and service,
-                // in a protocol-independent manner. It combines the functionality of gethostbyaddr(3)
-                // and getservbyport(3), but unlike those functions, getnameinfo() is reentrant
-                // and allows programs to eliminate IPv4-versus-IPv6 dependencies.
-                int result = getnameinfo((sockaddr *)&client,
-                                         sizeof(client), host, NI_MAXHOST,
-                                         svc, NI_MAXSERV, 0);
-                if (result)
-                {   // ****suppose the svc is the port of client
-                    cout << host << "connected on " << svc << endl;
-                }
-                else
+                if (clientSocket != -1) // clientSocket is a new socket
                 {
-                    inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
-                    cout << host <<" connected on " << ntohs(client.sin_port) << endl;
-                }
-                //while receiving display message, echo message
-
-                //wait for a message;
-
-                while(true) {
-                    char buf[4096];
-                    memset(buf, 0, 4096);
-                    int bytesRecv = recv(clientSocket, buf, 4096, 0);
-                    if (bytesRecv > 0) {
-                        cout << "received: " << string(buf, 0, bytesRecv) << endl;
-                        send(clientSocket, buf, bytesRecv + 1, 0);
-                    }else {
-                        close(clientSocket);
-                        break;
+                    close(listening);
+                    memset(host, 0, NI_MAXHOST);  //clean up the zombie
+                    memset(svc, 0, NI_MAXSERV);
+                    // The getnameinfo() function is the inverse of getaddrinfo(3):
+                    // it converts a socket address to a corresponding host and service,
+                    // in a protocol-independent manner. It combines the functionality of gethostbyaddr(3)
+                    // and getservbyport(3), but unlike those functions, getnameinfo() is reentrant
+                    // and allows programs to eliminate IPv4-versus-IPv6 dependencies.
+                    int result = getnameinfo((sockaddr *)&client,
+                                             sizeof(client), host, NI_MAXHOST,
+                                             svc, NI_MAXSERV, 0);
+                    if (result)
+                    {   // ****suppose the svc is the port of client
+                        cout << host << "connected on " << svc << endl;
                     }
+                    else
+                    {
+                        inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
+                        cout << host <<" connected on " << ntohs(client.sin_port) << endl;
+                    }
+                    //while receiving display message, echo message
+
+                    //wait for a message;
+
+                    while(true) {
+                        char buf[4096];
+                        memset(buf, 0, 4096);
+                        int bytesRecv = recv(clientSocket, buf, 4096, 0);
+                        if (bytesRecv > 0) {
+                            cout << "received: " << string(buf, 0, bytesRecv) << endl;
+                            send(clientSocket, buf, bytesRecv + 1, 0);
+                        }else {
+                            close(clientSocket);
+                            break;
+                        }
+                    }
+
+
                 }
-
-
             }
+            
 
-
-        }
         //accept a call
 
     }
