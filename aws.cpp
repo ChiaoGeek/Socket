@@ -49,7 +49,7 @@ int main()
     //accept a call
 
     for (;;) {
-        
+
         sockaddr_in client;
         socklen_t clientSize = sizeof(client);
         char host[NI_MAXHOST];
@@ -92,11 +92,7 @@ int main()
                 send(clientSocket, buf, bytesRecv + 1, 0);
             }
 
-        }else {
-            cout << "lose connection" << endl;
-            //resent the message;
         }
-        //close the listening socket
 
     }
 
