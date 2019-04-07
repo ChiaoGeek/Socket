@@ -73,27 +73,26 @@ int main()
                     cout << host <<" connected on " << ntohs(client.sin_port) << endl;
                 }
                 //while receiving display message, echo message
-                char buf[4096];
 
-                memset(buf, 0, 4096);
                 //wait for a message;
 
-                int bytesRecv = recv(clientSocket, buf, 4096, 0);
-                if (bytesRecv > 0) {
-                    cout << "received: " << string(buf, 0, bytesRecv) << endl;
-                    //resent the message;
-                    send(clientSocket, buf, bytesRecv + 1, 0);
-                    close(clientSocket);
+                while(true) {
+                    char buf[4096];
+                    memset(buf, 0, 4096);
+                    int bytesRecv = recv(clientSocket, buf, 4096, 0);
+                    if (bytesRecv > 0) {
+                        cout << "received: " << string(buf, 0, bytesRecv) << endl;
+                        send(clientSocket, buf, bytesRecv + 1, 0);
+                    }else {
+                        close(clientSocket);
+                        break;
+                    }
                 }
-//                else {
-//                    close(clientSocket);
-//                    break;
-//                }
 
 
             }
 
-        
+
         }
         //accept a call
 
