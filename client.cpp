@@ -42,7 +42,6 @@ int startClient(string arg)
     if(sendRes == -1)
     {
         cout << "could not send to server!";
-        continue;
     }
 
     //wait for response
