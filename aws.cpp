@@ -11,6 +11,7 @@ using namespace std;
 
 int main()
 {
+    for (;;) {
     //creat a socket
     int listening = socket(AF_INET, SOCK_STREAM, 0);
     if(listening == -1)
@@ -39,7 +40,7 @@ int main()
         cerr << "Can't bind to IP/port";
         return -2;
     }
-    for (;;) {
+
         //make a socket for listening
         if (listen(listening, SOMAXCONN) != -1)  //max # 128
         {
