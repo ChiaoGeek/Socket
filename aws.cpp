@@ -82,14 +82,18 @@ int main()
             //while receiving display message, echo message
             char buf[4096];
 
-
             memset(buf, 0, 4096);
             //wait for a message;
-            int bytesRecv = recv(clientSocket, buf, 4096, 0);
-            if (bytesRecv > 0) {
-                cout << "received: " << string(buf, 0, bytesRecv) << endl;
-                //resent the message;
-                send(clientSocket, buf, bytesRecv + 1, 0);
+            while(true) {
+                int bytesRecv = recv(clientSocket, buf, 4096, 0);
+                if (bytesRecv > 0) {
+                    cout << "received: " << string(buf, 0, bytesRecv) << endl;
+                    //resent the message;
+                    send(clientSocket, buf, bytesRecv + 1, 0);
+                }else {
+                    close(clientSocket);
+                    break;
+                }
             }
 
         }
