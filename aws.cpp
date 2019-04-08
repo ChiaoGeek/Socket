@@ -1,105 +1,65 @@
 #include <iostream>
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <netdb.h>
 #include <arpa/inet.h>
-#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
 #include <string>
-
+#include <netinet/in.h>
+#include <algorithm>
+#include <netdb.h>
+#include <cstring>
+#include <sstream>
+#include <fstream>
+#define BUFF_SIZE 102400
+#define SMALL_SIZE 100
+#define QSIZE 10
 using namespace std;
 
-int main()
-{
 
-    //creat a socket
-    int listening = socket(AF_INET, SOCK_STREAM, 0);
-    if(listening == -1)
-    {
-        cerr << "Can't creat a socket";
-        return -1;
-    }
+int main(int argc, char* argv[]) {
 
-    //bind the socket to a IP / port
-    sockaddr_in hint;
-    hint.sin_family = AF_INET;
-    hint.sin_port = htons(21563);
+    int serv_socket = socket(AF_INET, SOCK_STREAM, 0);
 
-    // This function converts the character string src into a network
-    // address structure in the af address family, then copies the network
-    // address structure to dst.  The af argument must be either AF_INET or
-    // AF_INET6.  dst is written in network byte order.
-    inet_pton(AF_INET, "0.0.0.0", &hint.sin_addr);
+    int port = atoi("21563");
 
-    // convert sockaddr_in into sockaddr
-    // addrlen specifies the size, in bytes, of the
-    // address structure pointed to by addr.  Traditionally, this operation
-    // is called “assigning a name to a socket”.
-    if(bind(listening, (sockaddr *)&hint, sizeof(hint)) == -1)
-    {
-        cerr << "Can't bind to IP/port";
-        return -2;
-    }
+    sockaddr_in server_addr;
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(port);
+    server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    socklen_t length_server = sizeof(server_addr);
 
-        //make a socket for listening
-        if (listen(listening, SOMAXCONN) != -1)  //max # 128
-        {
-            sockaddr_in client;
-            socklen_t clientSize = sizeof(client);
-            char host[NI_MAXHOST];
-            char svc[NI_MAXSERV];
-            for (;;) {
-                int clientSocket = accept(listening, (sockaddr *)&client, &clientSize);
+    bind(serv_socket, (sockaddr*)&server_addr, length_server);
 
-                if (clientSocket != -1) // clientSocket is a new socket
-                {
-                    close(listening);
-                    memset(host, 0, NI_MAXHOST);  //clean up the zombie
-                    memset(svc, 0, NI_MAXSERV);
-                    // The getnameinfo() function is the inverse of getaddrinfo(3):
-                    // it converts a socket address to a corresponding host and service,
-                    // in a protocol-independent manner. It combines the functionality of gethostbyaddr(3)
-                    // and getservbyport(3), but unlike those functions, getnameinfo() is reentrant
-                    // and allows programs to eliminate IPv4-versus-IPv6 dependencies.
-                    int result = getnameinfo((sockaddr *)&client,
-                                             sizeof(client), host, NI_MAXHOST,
-                                             svc, NI_MAXSERV, 0);
-                    if (result)
-                    {   // ****suppose the svc is the port of client
-                        cout << host << "connected on " << svc << endl;
-                    }
-                    else
-                    {
-                        inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
-                        cout << host <<" connected on " << ntohs(client.sin_port) << endl;
-                    }
-                    //while receiving display message, echo message
+    listen(serv_socket, QSIZE);
 
-                    //wait for a message;
+    while (true) {
 
-                    while(true) {
-                        char buf[4096];
-                        memset(buf, 0, 4096);
-                        int bytesRecv = recv(clientSocket, buf, 4096, 0);
-                        if (bytesRecv > 0) {
-                            cout << "received: " << string(buf, 0, bytesRecv) << endl;
-                            send(clientSocket, buf, bytesRecv + 1, 0);
-                        }else {
-                            close(clientSocket);
-                            break;
-                        }
-                    }
+        sockaddr_in client_addr;
+        socklen_t clientSize;
 
+        int new_socket = accept(serv_socket, (sockaddr*)&client_addr, &clientSize);
 
-                }
+        int pid = fork();
+        if (pid == 0) {
+
+            if (new_socket > 0) {
+                cout << "Client connected " << endl;
             }
-            
 
-        //accept a call
+            char recv_buff[BUFF_SIZE];
+            char send_buff[BUFF_SIZE];
+
+            int bytesRecv = recv(new_socket, recv_buff, BUFF_SIZE, 0);
+            cout << "received: " << string(recv_buff, 0, BUFF_SIZE) << endl;
+            send(new_socket, recv_buff, BUFF_SIZE + 1, 0);
+            close(new_socket);
+            break; // break the while loop in child
+        }
+        else {
+            close(new_socket);
+        }
 
     }
-
-    //close socket
-//    close(clientSocket);
+    return 0;
 
 }
