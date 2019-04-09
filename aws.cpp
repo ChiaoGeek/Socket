@@ -18,6 +18,8 @@
 #define SMALL_SIZE 100
 #define QSIZE 10
 
+#define CLIENT_MONITOR_FILE ".client_monitor.txt"
+
 using namespace std;
 
 void writeToFile(string filename, string content) {
@@ -108,7 +110,7 @@ void clientTcpServer() {
 
             int receiveRes = recv(childSocket, receiveBuff, BUFF_SIZE, 0);
             cout << "received: " << string(receiveBuff, 0, BUFF_SIZE) << endl;
-            writeToFile("test.txt", string(receiveBuff, 0, BUFF_SIZE));
+            writeToFile(CLIENT_MONITOR_FILE, string(receiveBuff, 0, BUFF_SIZE));
             send(childSocket, receiveBuff, BUFF_SIZE + 1, 0);
             close(childSocket);
         }
@@ -170,9 +172,9 @@ void monitorTcpSocket() {
                 {
                     break;
                 }
-                string message = getLineFromFile("test.txt");
+                string message = getLineFromFile(CLIENT_MONITOR_FILE);
                 if(message.compare("empty") != 0) {
-                    clearFile("test.txt");
+                    clearFile(CLIENT_MONITOR_FILE);
                 }
                 send(childSocket, message.c_str(), message.size(), 0);
             }

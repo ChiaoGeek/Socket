@@ -9,6 +9,7 @@
 #include <fstream>
 #include <ostream>
 
+
 using namespace std;
 
 void writeToFile(string filename, string content) {
@@ -93,7 +94,7 @@ void startClient(string arg)
                 cout << "server> " << res << "\r\n";
             }
         }
-        sleep(2);
+        sleep(1);
     }while(true);
 
     close(sock);
