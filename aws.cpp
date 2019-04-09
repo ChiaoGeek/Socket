@@ -19,7 +19,7 @@
 
 using namespace std;
 
-void clientTcpServer() {
+void clientTcpServer(string* shareMessage) {
     // create a socket
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if(serverSocket < 0) {
@@ -72,6 +72,7 @@ void clientTcpServer() {
 
             int receiveRes = recv(childSocket, receiveBuff, BUFF_SIZE, 0);
             cout << "received: " << string(receiveBuff, 0, BUFF_SIZE) << endl;
+            *shareMessage = string(receiveBuff, 0, BUFF_SIZE);
             send(childSocket, receiveBuff, BUFF_SIZE + 1, 0);
             close(childSocket);
         }
@@ -79,7 +80,7 @@ void clientTcpServer() {
     }
 }
 
-void monitorTcpSocket() {
+void monitorTcpSocket(string* shareMessage) {
     // create a socket
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if(serverSocket < 0) {
@@ -132,6 +133,7 @@ void monitorTcpSocket() {
 
             int receiveRes = recv(childSocket, receiveBuff, BUFF_SIZE, 0);
             cout << "received: " << string(receiveBuff, 0, BUFF_SIZE) << endl;
+            cout << "output: " << *shareMessage << endl;
             send(childSocket, receiveBuff, BUFF_SIZE + 1, 0);
             close(childSocket);
         }
@@ -140,12 +142,12 @@ void monitorTcpSocket() {
 }
 
 int main(int argc, char* argv[]) {
-
+    string message = "test";
     int pid = fork();
     if(pid == 0) {
-        monitorTcpSocket();
+        monitorTcpSocket(&message);
     }else {
-        clientTcpServer();
+        clientTcpServer(&message);
     }
 
     return 0;
