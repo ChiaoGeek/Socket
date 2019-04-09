@@ -12,6 +12,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <sstream>
+
 
 #define BUFF_SIZE 102400
 
@@ -68,6 +70,20 @@ int getCurrentNum(string filename) {
     }
 }
 
+int stringToInt(string str) {
+    int num = 0;
+    for(int i = 0; i < str.size(); i++) {
+        num *= 10;
+        num += (str[i] - '0');
+    }
+    return num;
+}
+
+string intToString(int num) {
+    stringstream s;
+    s << num;
+    return s.str();
+}
 
 void udpServer() {
     // create a socket
@@ -100,8 +116,8 @@ void udpServer() {
         if (recvlen > 0) {
             cout << "received: " << string(buf, 0, recvlen) << endl;
             int currNum = getCurrentNum(DATA_COUNT);
-            char *currNumCharArr = itoa(currNum + 1);
-            string cNum = string(currNumCharArr);
+
+            string cNum = intToString(currNum + 1);
             writeToFile(DATA_COUNT, cNum);
             appendToFile(DATA_FILE, cNum + " " + string(buf, 0, recvlen));
             sendto(udpSocket, buf, strlen(buf), 0, (struct sockaddr *)&client, clientSize);
@@ -115,3 +131,4 @@ int main(int argc, char** argv) {
     cout << "The udp server is up and running" << endl;
     udpServer();
 }
+
