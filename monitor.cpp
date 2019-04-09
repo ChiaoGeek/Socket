@@ -89,8 +89,8 @@ void startClient(string arg)
             //display response
             string res = getLineFromFile("test.txt");
             cout << "server> " << res << "\r\n";
-            if(!res.compare("empty")) {
-                cout << "server> " << res.size() << "\r\n";
+            if(res.size() != 5) {
+                cout << "server> " << res << "\r\n";
             }
         }
         arg = "test";
