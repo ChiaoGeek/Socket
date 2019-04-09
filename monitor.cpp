@@ -15,33 +15,6 @@
 
 using namespace std;
 
-void writeToFile(string filename, string content) {
-    ofstream myfile;
-    myfile.open(filename.c_str());
-    myfile << content;
-    myfile.close();
-}
-
-bool isEmpty(string filename){
-    ifstream file;
-    file.open(filename.c_str());
-    bool res = file.peek() == ifstream::traits_type::eof();
-    file.close();
-    return res;
-}
-
-string getLineFromFile(string filename) {
-    string res;
-    ifstream file;
-    file.open(filename.c_str());
-    if(isEmpty(filename)) {
-        res = "empty";
-    }else {
-        getline(file, res);
-    }
-    file.close();
-    return res;
-}
 
 
 void startClient()

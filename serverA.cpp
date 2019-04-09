@@ -6,14 +6,57 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <string>
+#include <sstream>
+#include <fstream>
+#include <ostream>
 
 #define BUFF_SIZE 102400
 
 #define SERVER_PORT 21014
 #define SERVER_IP "0.0.0.0"
 
+#define DATA_FILE "data.txt"
+#define DATA_COUNT "count.txt"
+
 
 using namespace std;
+
+void writeToFile(string filename, string content) {
+    ofstream myfile;
+    myfile.open(filename.c_str());
+    myfile << content;
+    myfile.close();
+}
+
+void appendToFile(string filename, string content) {
+    ofstream myfile;
+    myfile.open(filename.c_str(), std::ios_base::app);
+    myfile << content  << endl;
+    myfile.close();
+}
+
+bool isEmpty(string filename){
+    ifstream file;
+    file.open(filename.c_str());
+    bool res = file.peek() == ifstream::traits_type::eof();
+    file.close();
+    return res;
+}
+
+string getLineFromFile(string filename) {
+    string res;
+    ifstream file;
+    file.open(filename.c_str());
+    if(isEmpty(filename)) {
+        res = "empty";
+    }else {
+        getline(file, res);
+    }
+    file.close();
+    return res;
+}
+
+
 
 void udpServer() {
     // create a socket
@@ -40,11 +83,12 @@ void udpServer() {
     socklen_t clientSize = sizeof(client);
 
     char buf[BUFF_SIZE];     /* receive buffer */
-    /* now loop, receiving data and printing what we received */
+
     for (;;) {
         int recvlen = recvfrom(udpSocket, buf, BUFF_SIZE, 0, (struct sockaddr *)&client, &clientSize);
         if (recvlen > 0) {
             cout << "received: " << string(buf, 0, recvlen) << endl;
+            appendToFile(DATA_FILE, string(buf, 0, recvlen));
             sendto(udpSocket, buf, strlen(buf), 0, (struct sockaddr *)&client, clientSize);
         }
     }
