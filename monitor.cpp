@@ -6,8 +6,38 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <string>
+#include <fstream>
+#include <ostream>
 
 using namespace std;
+
+void writeToFile(string filename, string content) {
+    ofstream myfile;
+    myfile.open(filename.c_str());
+    myfile << content;
+    myfile.close();
+}
+
+bool isEmpty(string filename){
+    ifstream file;
+    file.open(filename.c_str());
+    bool res = file.peek() == ifstream::traits_type::eof();
+    file.close();
+    return res;
+}
+
+string getLineFromFile(string filename) {
+    string res;
+    ifstream file;
+    file.open(filename.c_str());
+    if(isEmpty(filename)) {
+        res = "empty";
+    }else {
+        getline(file, res);
+    }
+    file.close();
+    return res;
+}
 
 void startClient(string arg)
 {
@@ -57,7 +87,7 @@ void startClient(string arg)
         else
         {
             //display response
-            string res = string(buf, bytesReceived);
+            string res = getLineFromFile("test.txt");
             if(!res.compare("empty")) {
                 cout << "server> " << string(buf, bytesReceived) << "\r\n";
             }
