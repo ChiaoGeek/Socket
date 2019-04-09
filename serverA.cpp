@@ -99,9 +99,11 @@ void udpServer() {
         int recvlen = recvfrom(udpSocket, buf, BUFF_SIZE, 0, (struct sockaddr *)&client, &clientSize);
         if (recvlen > 0) {
             cout << "received: " << string(buf, 0, recvlen) << endl;
-            appendToFile(DATA_FILE, string(buf, 0, recvlen));
             int currNum = getCurrentNum(DATA_COUNT);
-            writeToFile(DATA_COUNT, std::to_string(currNum + 1));
+            char *currNumCharArr = itoa(currNum + 1);
+            string cNum = string(currNumCharArr);
+            writeToFile(DATA_COUNT, cNum);
+            appendToFile(DATA_FILE, cNum + " " + string(buf, 0, recvlen));
             sendto(udpSocket, buf, strlen(buf), 0, (struct sockaddr *)&client, clientSize);
         }
     }
