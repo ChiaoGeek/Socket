@@ -56,6 +56,14 @@ string getLineFromFile(string filename) {
     return res;
 }
 
+int getCurrentNum(string filename) {
+    string res = getLineFromFile(filename);
+    if(res.compare("empty") == 0) {
+        return 0;
+    }else {
+        return stoi(res);
+    }
+}
 
 
 void udpServer() {
@@ -89,6 +97,8 @@ void udpServer() {
         if (recvlen > 0) {
             cout << "received: " << string(buf, 0, recvlen) << endl;
             appendToFile(DATA_FILE, string(buf, 0, recvlen));
+            int currNum = getCurrentNum(DATA_COUNT);
+            writeToFile(DATA_COUNT, to_string(currNum + 1));
             sendto(udpSocket, buf, strlen(buf), 0, (struct sockaddr *)&client, clientSize);
         }
     }
