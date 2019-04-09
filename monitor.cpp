@@ -39,11 +39,6 @@ string getLineFromFile(string filename) {
     return res;
 }
 
-void clearFile(string filename) {
-    ofstream myfile;
-    myfile.open(filename.c_str(), std::ofstream::out | std::ofstream::trunc);
-    myfile.close();
-}
 
 void startClient(string arg)
 {
@@ -96,7 +91,6 @@ void startClient(string arg)
             string res = getLineFromFile("test.txt");
             if(!res.compare("empty")) {
                 cout << "server> " << res << "\r\n";
-                clearFile("test.txt");
             }
         }
         arg = "test";

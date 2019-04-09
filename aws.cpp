@@ -48,6 +48,13 @@ string getLineFromFile(string filename) {
     return res;
 }
 
+void clearFile(string filename) {
+    ofstream myfile;
+    myfile.open(filename.c_str(), std::ofstream::out | std::ofstream::trunc);
+    myfile.close();
+}
+
+
 void clientTcpServer() {
     // create a socket
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -165,6 +172,9 @@ void monitorTcpSocket() {
                     break;
                 }
                 string message = getLineFromFile("test.txt");
+                if(!message.compare("empty")) {
+                    clearFile("test.txt");
+                }
                 send(childSocket, message.c_str(), message.size() + 1, 0);
             }
             close(childSocket);
