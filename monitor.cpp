@@ -56,7 +56,7 @@ void startClient(string arg)
             string res = string(buf, bytesReceived);
 //            if(!res.compare("empty")) {
                 cout << "server> " << string(buf, bytesReceived) << "\r\n";
-            }
+//            }
         }
     }
 
