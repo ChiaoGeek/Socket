@@ -172,10 +172,11 @@ void monitorTcpSocket() {
                     break;
                 }
                 string message = getLineFromFile("test.txt");
+                cout << message << endl;
                 if(!message.compare("empty")) {
                     clearFile("test.txt");
                 }
-                send(childSocket, message.c_str(), message.size() + 1, 0);
+                send(childSocket, message.c_str(), message.size(), 0);
             }
             close(childSocket);
         }
