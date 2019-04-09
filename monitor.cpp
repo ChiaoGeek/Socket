@@ -10,6 +10,9 @@
 #include <ostream>
 
 
+#define SERVER_IP "127.0.0.1"
+#define SERVER_PORT 25014
+
 using namespace std;
 
 void writeToFile(string filename, string content) {
@@ -51,13 +54,12 @@ void startClient()
     }
 
     //creat a hint structure for the server we re connecting with
-    int port = 25014;
-    string ipAddress = "127.0.0.1";
 
     sockaddr_in hint;
     hint.sin_family = AF_INET;
-    hint.sin_port = htons(port);
-    inet_pton(AF_INET, ipAddress.c_str(), &hint.sin_addr);
+    hint.sin_port = htons(SERVER_PORT);
+    string serverIP = SERVER_IP;
+    inet_pton(AF_INET, serverIP.c_str(), &hint.sin_addr);
 
     //connect to the server on the socket
     int connectRes = connect(sock, (sockaddr *)&hint, sizeof(hint));
@@ -96,7 +98,6 @@ void startClient()
         }
         sleep(1);
     }while(true);
-
     close(sock);
 }
 

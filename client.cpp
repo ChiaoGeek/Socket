@@ -7,6 +7,11 @@
 #include <string.h>
 #include <string>
 
+
+
+#define SERVER_IP "127.0.0.1"
+#define SERVER_PORT 24014
+
 using namespace std;
 
 void startClient(string arg)
@@ -19,12 +24,11 @@ void startClient(string arg)
     }
 
     //creat a hint structure for the server we re connecting with
-    int port = 24014;
-    string ipAddress = "127.0.0.1";
 
+    string ipAddress = SERVER_IP;
     sockaddr_in hint;
     hint.sin_family = AF_INET;
-    hint.sin_port = htons(port);
+    hint.sin_port = htons(SERVER_PORT);
     inet_pton(AF_INET, ipAddress.c_str(), &hint.sin_addr);
 
     //connect to the server on the socket

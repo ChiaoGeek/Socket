@@ -19,6 +19,8 @@
 #define QSIZE 10
 
 #define CLIENT_MONITOR_FILE ".client_monitor.txt"
+#define CLINET_SERVER_PORT 24014
+#define MONITOR_SERVER_PORT 25014
 
 using namespace std;
 
@@ -66,11 +68,10 @@ void clientTcpServer() {
     }
 
     // configure server address
-    int serverPort = atoi("24014");
     int serverIp = INADDR_ANY;
     sockaddr_in serverAddr;
     serverAddr.sin_addr.s_addr = htonl(serverIp);
-    serverAddr.sin_port = htons(serverPort);
+    serverAddr.sin_port = htons(CLINET_SERVER_PORT);
     serverAddr.sin_family = AF_INET;
     socklen_t addrLen = sizeof(serverAddr);
 
@@ -127,11 +128,10 @@ void monitorTcpSocket() {
     }
 
     // configure server address
-    int serverPort = atoi("25014");
     int serverIp = INADDR_ANY;
     sockaddr_in serverAddr;
     serverAddr.sin_addr.s_addr = htonl(serverIp);
-    serverAddr.sin_port = htons(serverPort);
+    serverAddr.sin_port = htons(MONITOR_SERVER_PORT);
     serverAddr.sin_family = AF_INET;
     socklen_t addrLen = sizeof(serverAddr);
 
@@ -191,7 +191,5 @@ int main(int argc, char* argv[]) {
     }else {
         clientTcpServer();
     }
-
     return 0;
-
 }

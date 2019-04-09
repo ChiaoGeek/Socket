@@ -20,16 +20,17 @@
 
 using namespace std;
 
-#define PORT     22563
+#define SERVER_PORT     22563
 #define MAXLINE 1024
 
 // Driver code
-int main() {
+
+void udpClient(string s) {
     int sockfd;
     char buffer[MAXLINE];
     //char *hello = "Hello from client";
     struct sockaddr_in     servaddr;
-    string s = "hello";
+
     // Creating socket file descriptor
     if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) {
         perror("socket creation failed");
@@ -39,24 +40,35 @@ int main() {
     memset(&servaddr, 0, sizeof(servaddr));
 
     // Filling server information
+
     servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(PORT);
+    servaddr.sin_port = htons(SERVER_PORT);
     servaddr.sin_addr.s_addr = INADDR_ANY;
+    socklen_t serverSize = sizeof(servaddr);
 
-    int n, len;
+    int n;
 
-    //sendto(sockfd, (const char *)hello, strlen(hello),0, (const struct sockaddr *) &servaddr, sizeof(servaddr));
-    sendto(sockfd, s.c_str(), s.size(),
-           0, (const struct sockaddr *) &servaddr,
-           sizeof(servaddr));
-    printf("Hello message sent.\n");
 
-//    n = ::recvfrom(sockfd, (char *)buffer, MAXLINE,
-//                 MSG_WAITALL, (struct sockaddr *) &servaddr,
-//                 &len);
-    buffer[n] = '\0';
-    printf("Server : %s\n", buffer);
+    sendto(sockfd, s.c_str(), s.size(), 0, (const struct sockaddr *) &servaddr, sizeof(servaddr));
+    n = ::recvfrom(sockfd, (char *)buffer, MAXLINE, MSG_WAITALL, (struct sockaddr *) &servaddr, &serverSize);
+
+    cout << "server> " << string(buffer, n) << "\r\n";
 
     close(sockfd);
-    return 0;
+}
+
+int main(int argc, char** argv) {
+    cout << "The udp client is up and running" << endl;
+    string arguments = "";
+    if(argc == 6 || argc == 5) {
+        for(int i = 1; i < argc; i++) {
+            arguments += argv[i];
+            if(i != argc - 1) {
+                arguments += " ";
+            }
+        }
+        udpClient(arguments);
+    }else {
+        cout << "Arguments error" << endl;
+    }
 }

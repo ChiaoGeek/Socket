@@ -7,45 +7,41 @@
 #include <string.h>
 #include <string>
 
+#define BUFF_SIZE 102400
+
+#define SERVER_PORT 21014
+#define SERVER_IP "0.0.0.0"
+
+
 using namespace std;
 
-int main()
-{
-    //creat a socket
+void udpServer() {
+    // create a socket
     int udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
-    if(udpSocket == -1)
-    {
-        cerr << "Can't creat a udp socket";
-        return -1;
+    if(udpSocket < 0) {
+        cerr << "Can not create a udp server";
+        return;
     }
 
     //bind the socket to a IP / port
     sockaddr_in hint;
     hint.sin_family = AF_INET;
-    hint.sin_port = htons(22563);
+    hint.sin_port = htons(SERVER_PORT);
+    inet_pton(AF_INET, SERVER_IP, &hint.sin_addr);
 
-    // This function converts the character string src into a network
-    // address structure in the af address family, then copies the network
-    // address structure to dst.  The af argument must be either AF_INET or
-    // AF_INET6.  dst is written in network byte order.
-    inet_pton(AF_INET, "0.0.0.0", &hint.sin_addr);
-
-    // convert sockaddr_in into sockaddr
-    // addrlen specifies the size, in bytes, of the
-    // address structure pointed to by addr.  Traditionally, this operation
-    // is called “assigning a name to a socket”.
-    if(::bind(udpSocket, (sockaddr *)&hint, sizeof(hint)) == -1)
+    //bind the socket to a IP / port
+    if(::bind(udpSocket, (sockaddr *)&hint, sizeof(hint)) < 0)
     {
         cerr << "Can't bind to IP/port";
-        return -2;
+        return;
     }
 
     sockaddr_in client;
     socklen_t clientSize = sizeof(client);
-    char buf[4096];     /* receive buffer */
+    char buf[BUFF_SIZE];     /* receive buffer */
     /* now loop, receiving data and printing what we received */
     for (;;) {
-        int recvlen = recvfrom(udpSocket, buf, 4096, 0, (struct sockaddr *)&client, &clientSize);
+        int recvlen = recvfrom(udpSocket, buf, BUFF_SIZE, 0, (struct sockaddr *)&client, &clientSize);
         if (recvlen > 0) {
             cout << "received: " << string(buf, 0, recvlen) << endl;
             sendto(udpSocket, buf, strlen(buf), 0, (struct sockaddr *)&client, clientSize);
@@ -53,4 +49,9 @@ int main()
     }
     /* never exits */
 
+}
+
+int main(int argc, char** argv) {
+    cout << "The udp server is up and running" << endl;
+    udpServer();
 }
