@@ -19,7 +19,32 @@
 
 using namespace std;
 
-void clientTcpServer(string* shareMessage) {
+void writeToFile(string filname, string content) {
+    ofstream file(filname);
+    file << content;
+    file.close();
+}
+
+bool isEmpty(string filename){
+    ifstream file(filename);
+    bool res = file.good() && file.peek() == ifstream::traits_type::eof();
+    file.close();
+    return res;
+}
+
+string getLineFromFile(string filename) {
+    string res;
+    ifstream file(filename);
+    if(isEmpty(filename)) {
+        res = "empty";
+    }else {
+        getline(file, res);
+    }
+    file.close();
+    return res;
+}
+
+void clientTcpServer() {
     // create a socket
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if(serverSocket < 0) {
@@ -72,7 +97,7 @@ void clientTcpServer(string* shareMessage) {
 
             int receiveRes = recv(childSocket, receiveBuff, BUFF_SIZE, 0);
             cout << "received: " << string(receiveBuff, 0, BUFF_SIZE) << endl;
-            *shareMessage = string(receiveBuff, 0, BUFF_SIZE);
+            writeToFile("test.txt", string(receiveBuff, 0, BUFF_SIZE));
             send(childSocket, receiveBuff, BUFF_SIZE + 1, 0);
             close(childSocket);
         }
@@ -80,7 +105,7 @@ void clientTcpServer(string* shareMessage) {
     }
 }
 
-void monitorTcpSocket(string* shareMessage) {
+void monitorTcpSocket() {
     // create a socket
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if(serverSocket < 0) {
@@ -133,7 +158,7 @@ void monitorTcpSocket(string* shareMessage) {
 
             int receiveRes = recv(childSocket, receiveBuff, BUFF_SIZE, 0);
             cout << "received: " << string(receiveBuff, 0, BUFF_SIZE) << endl;
-            cout << "output: " << *shareMessage << endl;
+            cout << getLineFromFile("test.txt") << endl;
             send(childSocket, receiveBuff, BUFF_SIZE + 1, 0);
             close(childSocket);
         }
@@ -142,12 +167,11 @@ void monitorTcpSocket(string* shareMessage) {
 }
 
 int main(int argc, char* argv[]) {
-    static string* message = new string();
     int pid = fork();
     if(pid == 0) {
-        monitorTcpSocket(message);
+        monitorTcpSocket();
     }else {
-        clientTcpServer(message);
+        clientTcpServer();
     }
 
     return 0;
