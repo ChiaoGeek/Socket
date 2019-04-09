@@ -19,14 +19,16 @@
 
 using namespace std;
 
-void writeToFile(string filname, string content) {
-    ofstream file(filname);
+void writeToFile(string filename, string content) {
+    ofstream file;
+    file.open(filename);
     file << content;
     file.close();
 }
 
 bool isEmpty(string filename){
-    ifstream file(filename);
+    ifstream file;
+    file.open(filename);
     bool res = file.good() && file.peek() == ifstream::traits_type::eof();
     file.close();
     return res;
@@ -34,7 +36,8 @@ bool isEmpty(string filename){
 
 string getLineFromFile(string filename) {
     string res;
-    ifstream file(filename);
+    ifstream file;
+    file.open(filename);
     if(isEmpty(filename)) {
         res = "empty";
     }else {
