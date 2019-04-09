@@ -164,7 +164,7 @@ void monitorTcpSocket() {
             if(!message.compare("empty")) {
                 send(childSocket, message.c_str(), message.size() + 1, 0);
             }
-            close(childSocket);
+//            close(childSocket);
         }
 
     }
