@@ -36,7 +36,7 @@ void startClient(string arg)
 
     //while loop
     char buf[4096];
-    while(true) {
+    do {
         int sendRes = send(sock, arg.c_str(), arg.size() + 1, 0);
         cout << "stop1";
         if(sendRes == -1)
@@ -60,7 +60,7 @@ void startClient(string arg)
                 cout << "server> " << string(buf, bytesReceived) << "\r\n";
 //            }
         }
-    }
+    }while(true)
 
     close(sock);
 }
