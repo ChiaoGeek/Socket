@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <sstream>
 
+#include <vector>
 
 #define BUFF_SIZE 102400
 
@@ -85,6 +86,27 @@ string intToString(int num) {
     return s.str();
 }
 
+vector<string> stringToVector(string s) {
+    stringstream ss(s);
+    string b;
+    vector<string> v;
+    while(ss >> b) {
+        v.push_back(b);
+    }
+    return v;
+}
+
+string getStringFromVector(int i, vector<string> v) {
+    string res;
+//    for(auto i = v.begin() + i; i != v.end(); ++i) {
+//        res += *i + " ";
+//    }
+    for(int j = i; j < v.size(); j++) {
+        res += v[j] + " ";
+    }
+    return res;
+}
+
 void udpServer() {
     // create a socket
     int udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
@@ -115,12 +137,31 @@ void udpServer() {
         int recvlen = recvfrom(udpSocket, buf, BUFF_SIZE, 0, (struct sockaddr *)&client, &clientSize);
         if (recvlen > 0) {
             cout << "received: " << string(buf, 0, recvlen) << endl;
-            int currNum = getCurrentNum(DATA_COUNT);
 
-            string cNum = intToString(currNum + 1);
-            writeToFile(DATA_COUNT, cNum);
-            appendToFile(DATA_FILE, cNum + " " + string(buf, 0, recvlen));
-            sendto(udpSocket, buf, strlen(buf), 0, (struct sockaddr *)&client, clientSize);
+            string rMessage = string(buf, 0, recvlen);
+            vector<string> v = stringToVector(rMessage);
+
+            if(v.size() > 0) {
+                string firstStr = *(v.begin());
+                if(firstStr.compare("write") == 0) {
+                    int currNum = getCurrentNum(DATA_COUNT);
+                    string cNum = intToString(currNum + 1);
+
+                    appendToFile(DATA_FILE, cNum + " " + getStringFromVector(1, v));
+                    writeToFile(DATA_COUNT, cNum);
+
+//                    sendto(udpSocket, buf, strlen(buf), 0, (struct sockaddr *)&client, clientSize);
+                }else if(firstStr.compare("search") == 0) {
+                    ;
+                }
+
+            }
+
+
+
+
+
+
         }
     }
     /* never exits */
