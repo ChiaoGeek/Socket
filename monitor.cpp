@@ -60,7 +60,7 @@ void startClient(string arg)
                 cout << "server> " << string(buf, bytesReceived) << "\r\n";
 //            }
         }
-    }while(true)
+    }while(true);
 
     close(sock);
 }
