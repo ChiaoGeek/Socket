@@ -61,7 +61,7 @@ int getCurrentNum(string filename) {
     if(res.compare("empty") == 0) {
         return 0;
     }else {
-        return stoi(res);
+        return atoi(res.c_str());
     }
 }
 
