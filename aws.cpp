@@ -12,6 +12,7 @@
 #include <cstring>
 #include <sstream>
 #include <fstream>
+#include <ostream>
 
 #define BUFF_SIZE 102400
 #define SMALL_SIZE 100
@@ -20,16 +21,16 @@
 using namespace std;
 
 void writeToFile(string filename, string content) {
-    ofstream file;
-    file.open(filename);
-    file << content;
-    file.close();
+    ofstream myfile;
+    myfile.open(filename);
+    myfile << content;
+    myfile.close();
 }
 
 bool isEmpty(string filename){
     ifstream file;
     file.open(filename);
-    bool res = file.good() && file.peek() == ifstream::traits_type::eof();
+    bool res = file.is_open() &&  file.good() && file.peek() == ifstream::traits_type::eof();
     file.close();
     return res;
 }
