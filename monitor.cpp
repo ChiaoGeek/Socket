@@ -89,9 +89,6 @@ void startClient(string arg)
         {
             //display response
             string res = string(buf, bytesReceived);
-//            cout << "server> " << res << "\r\n";
-//            cout << "server> " << res.compare("empty") << "\r\n";
-
             if(res.compare("empty") != 0) {
                 cout << "server> " << res << "\r\n";
             }

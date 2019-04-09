@@ -166,18 +166,14 @@ void monitorTcpSocket() {
             while(true) {
                 char receiveBuff[BUFF_SIZE];
                 int receiveRes = recv(childSocket, receiveBuff, BUFF_SIZE, 0);
-//                cout << "received: " << string(receiveBuff, 0, BUFF_SIZE) << endl;
                 if (receiveRes == -1)
                 {
                     break;
                 }
                 string message = getLineFromFile("test.txt");
-                cout << message.size() << endl;
-//                if(!message.compare("empty")) {
-//                    cout << "has been cleared" << endl;
-//                    clearFile("test.txt");
-//                }
-                clearFile("test.txt");
+                if(message.compare("empty") != 0) {
+                    clearFile("test.txt");
+                }
                 send(childSocket, message.c_str(), message.size(), 0);
             }
             close(childSocket);
