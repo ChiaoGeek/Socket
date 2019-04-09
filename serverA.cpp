@@ -61,7 +61,7 @@ int getCurrentNum(string filename) {
     if(res.compare("empty") == 0) {
         return 0;
     }else {
-        return stoi(res);
+        return std::stoi(res);
     }
 }
 
@@ -98,7 +98,7 @@ void udpServer() {
             cout << "received: " << string(buf, 0, recvlen) << endl;
             appendToFile(DATA_FILE, string(buf, 0, recvlen));
             int currNum = getCurrentNum(DATA_COUNT);
-            writeToFile(DATA_COUNT, to_string(currNum + 1));
+            writeToFile(DATA_COUNT, std::to_string(currNum + 1));
             sendto(udpSocket, buf, strlen(buf), 0, (struct sockaddr *)&client, clientSize);
         }
     }
