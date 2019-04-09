@@ -41,7 +41,7 @@ string getLineFromFile(string filename) {
 }
 
 
-void startClient(string arg)
+void startClient()
 {
     //creat a socket
     int sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -65,7 +65,7 @@ void startClient(string arg)
     {
         return;
     }
-
+    string arg = "send";
     //while loop
     char buf[4096];
     do {
@@ -102,17 +102,5 @@ void startClient(string arg)
 
 int main(int argc, char** argv) {
     cout << "The monitor client is up and running" << endl;
-    string arguments = "";
-    if(argc == 6 || argc == 5) {
-        for(int i = 1; i < argc; i++) {
-            arguments += argv[i];
-            if(i != argc - 1) {
-                arguments += " ";
-            }
-        }
-        startClient(arguments);
-//        cout << arguments << endl;
-    }else {
-        cout << "Arguments error" << endl;
-    }
+    startClient();
 }
