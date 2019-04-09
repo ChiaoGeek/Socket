@@ -30,7 +30,7 @@ void writeToFile(string filename, string content) {
 bool isEmpty(string filename){
     ifstream file;
     file.open(filename.c_str());
-    bool res = file.is_open() &&  file.good() && file.peek() == ifstream::traits_type::eof();
+    bool res = file.peek() == ifstream::traits_type::eof();
     file.close();
     return res;
 }
@@ -158,11 +158,12 @@ void monitorTcpSocket() {
             // receive message
             char receiveBuff[BUFF_SIZE];
 
-
             int receiveRes = recv(childSocket, receiveBuff, BUFF_SIZE, 0);
             cout << "received: " << string(receiveBuff, 0, BUFF_SIZE) << endl;
             string message = getLineFromFile("test.txt");
-            send(childSocket, message.c_str(), message.size() + 1, 0);
+            if(!message.compare("empty")) {
+                send(childSocket, message.c_str(), message.size() + 1, 0);
+            }
             close(childSocket);
         }
 
