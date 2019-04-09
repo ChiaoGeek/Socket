@@ -10,6 +10,9 @@
 #include <fstream>
 #include <ostream>
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #define BUFF_SIZE 102400
 
 #define SERVER_PORT 21014
