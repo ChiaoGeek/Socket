@@ -36,28 +36,29 @@ void startClient(string arg)
 
     //while loop
     char buf[4096];
+    while(true) {
+        int sendRes = send(sock, arg.c_str(), arg.size() + 1, 0);
+        if(sendRes == -1)
+        {
+            cout << "could not send to server!";
+        }
 
-    //send to server
-    int sendRes = send(sock, arg.c_str(), arg.size() + 1, 0);
-    if(sendRes == -1)
-    {
-        cout << "could not send to server!";
+        //wait for response
+        memset(buf, 0, 4096);
+        int bytesReceived = recv(sock, buf, 4096, 0);
+        if (bytesReceived == -1)
+        {
+            cout << "there was an error getting from the server\r\n";
+        }
+        else
+        {
+            //display response
+            string res = string(buf, bytesReceived);
+            if(!res.compare("empty")) {
+                cout << "server> " << string(buf, bytesReceived) << "\r\n";
+            }
+        }
     }
-
-    //wait for response
-    memset(buf, 0, 4096);
-    int bytesReceived = recv(sock, buf, 4096, 0);
-    if (bytesReceived == -1)
-    {
-        cout << "there was an error getting from the server\r\n";
-    }
-    else
-    {
-        //display response
-        cout << "server> " << string(buf, bytesReceived) << "\r\n";
-    }
-
-    //close the socket
 
     close(sock);
 }
