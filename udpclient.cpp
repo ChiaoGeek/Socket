@@ -20,7 +20,7 @@
 
 using namespace std;
 
-#define SERVER_PORT     22563
+#define SERVER_PORT     21014
 #define MAXLINE 1024
 
 // Driver code
@@ -52,7 +52,7 @@ void udpClient(string s) {
     sendto(sockfd, s.c_str(), s.size(), 0, (const struct sockaddr *) &servaddr, sizeof(servaddr));
 //    n = ::recvfrom(sockfd, (char *)buffer, MAXLINE, MSG_WAITALL, (struct sockaddr *) &servaddr, &serverSize);
 
-    cout << "server> " << string(buffer, n) << "\r\n";
+//    cout << "server> " << string(buffer, n) << "\r\n";
 
 //    close(sockfd);
 }
