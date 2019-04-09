@@ -172,8 +172,9 @@ void monitorTcpSocket() {
                     break;
                 }
                 string message = getLineFromFile("test.txt");
-                cout << message << endl;
+//                cout << message.size() << endl;
                 if(!message.compare("empty")) {
+                    cout << "has been cleared" << endl;
                     clearFile("test.txt");
                 }
                 send(childSocket, message.c_str(), message.size(), 0);
