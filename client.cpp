@@ -19,7 +19,7 @@ void startClient(string arg)
     }
 
     //creat a hint structure for the server we re connecting with
-    int port = 21563;
+    int port = 24014;
     string ipAddress = "127.0.0.1";
 
     sockaddr_in hint;
