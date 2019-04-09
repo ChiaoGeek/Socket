@@ -142,12 +142,12 @@ void monitorTcpSocket(string* shareMessage) {
 }
 
 int main(int argc, char* argv[]) {
-    string message = "test";
+    string* message = new string();
     int pid = fork();
     if(pid == 0) {
-        monitorTcpSocket(&message);
+        monitorTcpSocket(message);
     }else {
-        clientTcpServer(&message);
+        clientTcpServer(message);
     }
 
     return 0;
