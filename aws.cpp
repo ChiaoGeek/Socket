@@ -1,8 +1,10 @@
+#include <sys/types.h>
+#include <sys/socket.h>
+
 #include <iostream>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include <sys/types.h>
-#include <sys/socket.h>
+
 #include <string>
 #include <netinet/in.h>
 #include <algorithm>
@@ -15,12 +17,16 @@
 #define QSIZE 10
 using namespace std;
 
+//void clientTcpServer() {
+//    int serv_socket = socket(AF_INEF, SOCK_STREAM, 0);
+//
+//}
 
 int main(int argc, char* argv[]) {
 
     int serv_socket = socket(AF_INET, SOCK_STREAM, 0);
 
-    int port = atoi("21563");
+    int port = atoi("24014");
 
     sockaddr_in server_addr;
     server_addr.sin_family = AF_INET;
@@ -40,6 +46,7 @@ int main(int argc, char* argv[]) {
         int new_socket = accept(serv_socket, (sockaddr*)&client_addr, &clientSize);
 
         int pid = fork();
+
         if (pid == 0) {
 
             if (new_socket > 0) {
@@ -56,7 +63,8 @@ int main(int argc, char* argv[]) {
             break; // break the while loop in child
         }
         else {
-            close(new_socket);
+//            close(new_socket);
+            ;
         }
 
     }
