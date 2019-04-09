@@ -123,7 +123,7 @@ void monitorTcpSocket() {
         int pid = fork();
         if(pid == 0) {
             if(childSocket > 0) {
-                cout << "Client connected" << endl;
+                cout << "Monitor Client connected" << endl;
             }
             // receive message
             char receiveBuff[BUFF_SIZE];
