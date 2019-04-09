@@ -156,12 +156,14 @@ void monitorTcpSocket() {
                 cout << "Monitor Client connected" << endl;
             }
             // receive message
-            char receiveBuff[BUFF_SIZE];
+            while(true) {
+                char receiveBuff[BUFF_SIZE];
 
-            int receiveRes = recv(childSocket, receiveBuff, BUFF_SIZE, 0);
-            cout << "received: " << string(receiveBuff, 0, BUFF_SIZE) << endl;
-            string message = getLineFromFile("test.txt");
-            send(childSocket, message.c_str(), message.size() + 1, 0);
+                int receiveRes = recv(childSocket, receiveBuff, BUFF_SIZE, 0);
+                cout << "received: " << string(receiveBuff, 0, BUFF_SIZE) << endl;
+                string message = getLineFromFile("test.txt");
+                send(childSocket, message.c_str(), message.size() + 1, 0);
+            }
 //            close(childSocket);
         }
 
