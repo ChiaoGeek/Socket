@@ -93,7 +93,7 @@ void startClient(string arg)
                 cout << "server> " << res << "\r\n";
             }
         }
-        usleep(2000000);
+        sleep(2);
     }while(true);
 
     close(sock);
