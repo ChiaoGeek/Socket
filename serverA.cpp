@@ -61,7 +61,7 @@ int getCurrentNum(string filename) {
     if(res.compare("empty") == 0) {
         return 0;
     }else {
-        return std::stoi(res);
+        return stoi(res);
     }
 }
 
