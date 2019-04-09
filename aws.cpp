@@ -167,7 +167,7 @@ void monitorTcpSocket() {
                 string message = getLineFromFile("test.txt");
                 send(childSocket, message.c_str(), message.size() + 1, 0);
             }
-//            close(childSocket);
+            close(childSocket);
         }
 
     }

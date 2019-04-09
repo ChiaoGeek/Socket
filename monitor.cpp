@@ -88,8 +88,9 @@ void startClient(string arg)
         {
             //display response
             string res = getLineFromFile("test.txt");
+            cout << "server> " << res << "\r\n";
             if(!res.compare("empty")) {
-                cout << "server> " << string(buf, bytesReceived) << "\r\n";
+                cout << "server> " << res << "\r\n";
             }
         }
         arg = "test";
