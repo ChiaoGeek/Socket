@@ -50,11 +50,11 @@ void udpClient(string s) {
 
 
     sendto(sockfd, s.c_str(), s.size(), 0, (const struct sockaddr *) &servaddr, sizeof(servaddr));
-    n = ::recvfrom(sockfd, (char *)buffer, MAXLINE, MSG_WAITALL, (struct sockaddr *) &servaddr, &serverSize);
+//    n = ::recvfrom(sockfd, (char *)buffer, MAXLINE, MSG_WAITALL, (struct sockaddr *) &servaddr, &serverSize);
 
     cout << "server> " << string(buffer, n) << "\r\n";
 
-    close(sockfd);
+//    close(sockfd);
 }
 
 int main(int argc, char** argv) {

@@ -38,6 +38,7 @@ void udpServer() {
 
     sockaddr_in client;
     socklen_t clientSize = sizeof(client);
+
     char buf[BUFF_SIZE];     /* receive buffer */
     /* now loop, receiving data and printing what we received */
     for (;;) {
