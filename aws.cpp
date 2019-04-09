@@ -60,12 +60,12 @@ int main(int argc, char* argv[]) {
             cout << "received: " << string(recv_buff, 0, BUFF_SIZE) << endl;
             send(new_socket, recv_buff, BUFF_SIZE + 1, 0);
             close(new_socket);
-            break; // break the while loop in child
+//            break; // break the while loop in child
         }
-        else {
-//            close(new_socket);
-            ;
-        }
+//        else {
+////            close(new_socket);
+//            ;
+//        }
 
     }
     return 0;
