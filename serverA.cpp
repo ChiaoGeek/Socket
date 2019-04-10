@@ -164,7 +164,7 @@ void udpServer() {
 //                    sendto(udpSocket, buf, strlen(buf), 0, (struct sockaddr *)&client, clientSize);
                 }else if(firstStr.compare("search") == 0) {
                     int id = stringToInt(*(++v.begin()));
-                    cout << id << endl;
+                    cout << rMessage + " " + id << endl;
                     string response;
                     if(id > currNum) {
                         response = "empty";
