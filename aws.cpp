@@ -14,6 +14,9 @@
 #include <fstream>
 #include <ostream>
 
+#include <vector>
+
+
 
 
 #define BUFF_SIZE 102400
@@ -62,7 +65,15 @@ void clearFile(string filename) {
     myfile.close();
 }
 
-
+vector<string> stringToVector(string s) {
+    stringstream ss(s);
+    string b;
+    vector<string> v;
+    while(ss >> b) {
+        v.push_back(b);
+    }
+    return v;
+}
 
 void udpClient(string s) {
 
@@ -137,8 +148,19 @@ void clientTcpServer() {
 
             int receiveRes = recv(childSocket, receiveBuff, BUFF_SIZE, 0);
             string resMessage = string(receiveBuff, 0, BUFF_SIZE);
+            vector<string> v = stringToVector(resMessage);
+            string firstCommand = *(v.begin());
             cout << "received: " << resMessage << endl;
+            // for monitor
             writeToFile(CLIENT_MONITOR_FILE, resMessage);
+            if(firstCommand.compare("write") == 0) {
+                udpClient(resMessage);
+            }else if(firstCommand.compare("search") == 0) {
+                udpClient(resMessage);
+            }else if(firstCommand.compare("compute") == 0) {
+                udpClient("search " + *(++v.begin()));
+            }
+
             udpClient(resMessage);
             send(childSocket, receiveBuff, BUFF_SIZE + 1, 0);
             close(childSocket);
