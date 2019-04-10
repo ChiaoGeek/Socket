@@ -26,35 +26,24 @@ using namespace std;
 // Driver code
 
 void udpClient(string s) {
-    int sockfd;
-    char buffer[MAXLINE];
-    //char *hello = "Hello from client";
-    struct sockaddr_in     servaddr;
 
     // Creating socket file descriptor
-    if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) {
-        perror("socket creation failed");
-        exit(EXIT_FAILURE);
+
+    int udpClientSocket = socket(AF_INET, SOCK_DGRAM, 0);
+
+    if ( udpClientSocket < 0 ) {
+        cerr << "Can not create socket" << endl;
+        return;
     }
 
-    memset(&servaddr, 0, sizeof(servaddr));
-
-    // Filling server information
-
+    sockaddr_in  servaddr;
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(SERVER_PORT);
     servaddr.sin_addr.s_addr = INADDR_ANY;
     socklen_t serverSize = sizeof(servaddr);
 
-    int n;
+    sendto(udpClientSocket, s.c_str(), s.size(), 0, (const struct sockaddr *) &servaddr, sizeof(servaddr));
 
-
-    sendto(sockfd, s.c_str(), s.size(), 0, (const struct sockaddr *) &servaddr, sizeof(servaddr));
-//    n = ::recvfrom(sockfd, (char *)buffer, MAXLINE, MSG_WAITALL, (struct sockaddr *) &servaddr, &serverSize);
-
-//    cout << "server> " << string(buffer, n) << "\r\n";
-
-//    close(sockfd);
 }
 
 int main(int argc, char** argv) {
