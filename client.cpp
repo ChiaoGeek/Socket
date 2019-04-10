@@ -69,7 +69,7 @@ void startClient(string arg)
 int main(int argc, char** argv) {
     cout << "The client is up and running" << endl;
     string arguments = "";
-    if(argc == 6 || argc == 5) {
+    if(argc == 6 || argc == 3 || argc == 5) {
         for(int i = 1; i < argc; i++) {
             arguments += argv[i];
             if(i != argc - 1) {
