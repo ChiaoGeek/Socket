@@ -18,7 +18,6 @@
 
 
 
-
 #define BUFF_SIZE 102400
 #define SMALL_SIZE 100
 #define QSIZE 10
@@ -129,7 +128,6 @@ void udpServer() {
         int recvlen = recvfrom(udpSocket, buf, BUFF_SIZE, 0, (struct sockaddr *)&client, &clientSize);
         if (recvlen > 0) {
             cout << "received: " << string(buf, 0, recvlen) << endl;
-
             string rMessage = string(buf, 0, recvlen);
             vector<string> v = stringToVector(rMessage);
             cout << rMessage << endl;

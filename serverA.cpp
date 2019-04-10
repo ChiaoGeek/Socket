@@ -21,6 +21,8 @@
 #define SERVER_PORT 21014
 #define SERVER_IP "0.0.0.0"
 
+#define AWS_UDP_SERVER_PORT     23014
+
 #define DATA_FILE "data.txt"
 #define DATA_COUNT "count.txt"
 
@@ -119,6 +121,29 @@ string getLineFromFile(int id, string filename) {
     return res;
 }
 
+
+
+void udpClient(string s) {
+
+    // Creating socket file descriptor
+
+    int udpClientSocket = socket(AF_INET, SOCK_DGRAM, 0);
+
+    if ( udpClientSocket < 0 ) {
+        cerr << "Can not create socket" << endl;
+        return;
+    }
+
+    sockaddr_in  servaddr;
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_port = htons(AWS_UDP_SERVER_PORT);
+    servaddr.sin_addr.s_addr = INADDR_ANY;
+    socklen_t serverSize = sizeof(servaddr);
+
+    sendto(udpClientSocket, s.c_str(), s.size(), 0, (const struct sockaddr *) &servaddr, sizeof(servaddr));
+
+}
+
 void udpServer() {
     // create a socket
     int udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
@@ -154,24 +179,26 @@ void udpServer() {
             vector<string> v = stringToVector(rMessage);
 
             if(v.size() > 0) {
+                string response;
                 string firstStr = *(v.begin());
                 int currNum = getCurrentNum(DATA_COUNT);
                 if(firstStr.compare("write") == 0) {
                     string cNum = intToString(currNum + 1);
                     appendToFile(DATA_FILE, cNum + " " + getStringFromVector(1, v));
                     writeToFile(DATA_COUNT, cNum);
+                    response = cNum;
 
 //                    sendto(udpSocket, buf, strlen(buf), 0, (struct sockaddr *)&client, clientSize);
                 }else if(firstStr.compare("search") == 0) {
                     int id = stringToInt(*(++v.begin()));
-                    string response;
                     if(id > currNum) {
                         response = "empty";
                     }else {
                         response = getLineFromFile(id, DATA_FILE);
                     }
-                    cout << response << endl;
+
                 }
+                udpClient(response);
 
             }
         }
