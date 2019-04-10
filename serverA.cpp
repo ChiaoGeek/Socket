@@ -98,12 +98,24 @@ vector<string> stringToVector(string s) {
 
 string getStringFromVector(int i, vector<string> v) {
     string res;
-//    for(auto i = v.begin() + i; i != v.end(); ++i) {
-//        res += *i + " ";
-//    }
     for(int j = i; j < v.size(); j++) {
         res += v[j] + " ";
     }
+    return res;
+}
+
+string getLineFromFile(int id, string filename) {
+    string res;
+    ifstream file;
+    file.open(filename.c_str());
+    if(isEmpty(filename)) {
+        res = "empty";
+    }else {
+        for(int i = 1; i < id; i++) {
+            getline(file, res);
+        }
+    }
+    file.close();
     return res;
 }
 
@@ -143,25 +155,25 @@ void udpServer() {
 
             if(v.size() > 0) {
                 string firstStr = *(v.begin());
+                int currNum = getCurrentNum(DATA_COUNT);
                 if(firstStr.compare("write") == 0) {
-                    int currNum = getCurrentNum(DATA_COUNT);
                     string cNum = intToString(currNum + 1);
-
                     appendToFile(DATA_FILE, cNum + " " + getStringFromVector(1, v));
                     writeToFile(DATA_COUNT, cNum);
 
 //                    sendto(udpSocket, buf, strlen(buf), 0, (struct sockaddr *)&client, clientSize);
                 }else if(firstStr.compare("search") == 0) {
-                    ;
+                    int id = stringToInt(*(++v.begin()));
+                    string response;
+                    if(id > currNum) {
+                        response = "empty";
+                    }else {
+                        response = getLineFromFile(id, DATA_FILE);
+                    }
+                    cout << response << endl;
                 }
 
             }
-
-
-
-
-
-
         }
     }
     /* never exits */

@@ -60,7 +60,7 @@ void udpClient(string s) {
 int main(int argc, char** argv) {
     cout << "The udp client is up and running" << endl;
     string arguments = "";
-    if(argc == 6 || argc == 5) {
+    if(argc == 6 || argc == 3) {
         for(int i = 1; i < argc; i++) {
             arguments += argv[i];
             if(i != argc - 1) {
