@@ -24,6 +24,8 @@
 #define CLINET_SERVER_PORT 24014
 #define MONITOR_SERVER_PORT 25014
 
+#define SERVERA_PORT     21014
+
 using namespace std;
 
 void writeToFile(string filename, string content) {
@@ -60,6 +62,28 @@ void clearFile(string filename) {
     myfile.close();
 }
 
+
+
+void udpClient(string s) {
+
+    // Creating socket file descriptor
+
+    int udpClientSocket = socket(AF_INET, SOCK_DGRAM, 0);
+
+    if ( udpClientSocket < 0 ) {
+        cerr << "Can not create socket" << endl;
+        return;
+    }
+
+    sockaddr_in  servaddr;
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_port = htons(SERVERA_PORT);
+    servaddr.sin_addr.s_addr = INADDR_ANY;
+    socklen_t serverSize = sizeof(servaddr);
+
+    sendto(udpClientSocket, s.c_str(), s.size(), 0, (const struct sockaddr *) &servaddr, sizeof(servaddr));
+
+}
 
 void clientTcpServer() {
     // create a socket
@@ -112,8 +136,10 @@ void clientTcpServer() {
             char sendBuff[BUFF_SIZE];
 
             int receiveRes = recv(childSocket, receiveBuff, BUFF_SIZE, 0);
-            cout << "received: " << string(receiveBuff, 0, BUFF_SIZE) << endl;
-            writeToFile(CLIENT_MONITOR_FILE, string(receiveBuff, 0, BUFF_SIZE));
+            string resMessage = string(receiveBuff, 0, BUFF_SIZE);
+            cout << "received: " << resMessage << endl;
+            writeToFile(CLIENT_MONITOR_FILE, resMessage);
+            udpClient(resMessage);
             send(childSocket, receiveBuff, BUFF_SIZE + 1, 0);
             close(childSocket);
         }

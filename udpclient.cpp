@@ -21,9 +21,6 @@
 using namespace std;
 
 #define SERVER_PORT     21014
-#define MAXLINE 1024
-
-// Driver code
 
 void udpClient(string s) {
 
