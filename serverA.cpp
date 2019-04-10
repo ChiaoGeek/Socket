@@ -111,7 +111,7 @@ string getLineFromFile(int id, string filename) {
     if(isEmpty(filename)) {
         res = "empty";
     }else {
-        for(int i = 1; i < id; i++) {
+        for(int i = 1; i <= id; i++) {
             getline(file, res);
         }
     }
