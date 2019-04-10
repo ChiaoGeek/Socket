@@ -160,8 +160,6 @@ void clientTcpServer() {
             }else if(firstCommand.compare("compute") == 0) {
                 udpClient("search " + *(++v.begin()));
             }
-
-            udpClient(resMessage);
             send(childSocket, receiveBuff, BUFF_SIZE + 1, 0);
             close(childSocket);
         }
