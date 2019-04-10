@@ -29,6 +29,9 @@
 
 #define SERVERA_PORT     21014
 
+#define UDP_SERVER_PORT 23014
+#define UDP_SERVER_IP "0.0.0.0"
+
 using namespace std;
 
 void writeToFile(string filename, string content) {
@@ -94,6 +97,44 @@ void udpClient(string s) {
 
     sendto(udpClientSocket, s.c_str(), s.size(), 0, (const struct sockaddr *) &servaddr, sizeof(servaddr));
 
+}
+
+void udpServer() {
+    // create a socket
+    int udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
+    if(udpSocket < 0) {
+        cerr << "Can not create a udp server";
+        return;
+    }
+
+    //bind the socket to a IP / port
+    sockaddr_in hint;
+    hint.sin_family = AF_INET;
+    hint.sin_port = htons(UDP_SERVER_PORT);
+    inet_pton(AF_INET, UDP_SERVER_IP, &hint.sin_addr);
+
+    //bind the socket to a IP / port
+    if(::bind(udpSocket, (sockaddr *)&hint, sizeof(hint)) < 0)
+    {
+        cerr << "Can't bind to IP/port";
+        return;
+    }
+
+    sockaddr_in client;
+    socklen_t clientSize = sizeof(client);
+
+    char buf[BUFF_SIZE];     /* receive buffer */
+
+    for (;;) {
+        int recvlen = recvfrom(udpSocket, buf, BUFF_SIZE, 0, (struct sockaddr *)&client, &clientSize);
+        if (recvlen > 0) {
+            cout << "received: " << string(buf, 0, recvlen) << endl;
+
+            string rMessage = string(buf, 0, recvlen);
+            vector<string> v = stringToVector(rMessage);
+            cout << rMessage << endl;
+        }
+    }
 }
 
 void clientTcpServer() {
@@ -237,7 +278,12 @@ int main(int argc, char* argv[]) {
     if(pid == 0) {
         monitorTcpSocket();
     }else {
-        clientTcpServer();
+        int ppid = fork();
+        if(ppid == 0) {
+            udpServer();
+        }else {
+            clientTcpServer();
+        }
     }
     return 0;
 }

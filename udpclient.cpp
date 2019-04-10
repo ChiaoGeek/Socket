@@ -20,7 +20,7 @@
 
 using namespace std;
 
-#define SERVER_PORT     21014
+#define SERVER_PORT     23014
 
 void udpClient(string s) {
 
