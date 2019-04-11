@@ -132,8 +132,11 @@ void udpServer() {
         if (recvlen > 0) {
             cout << "received: " << string(buf, 0, recvlen) << endl;
             string rMessage = string(buf, 0, recvlen);
-            writeToFile(CLIENT_UDP_FILE, rMessage);
-//            vector<string> v = stringToVector(rMessage);
+            vector<string> v = stringToVector(rMessage);
+            string firstWord = *(v.begin());
+            if(firstWord.compare("id") != 0) {
+                writeToFile(CLIENT_UDP_FILE, rMessage);
+            }
             cout << rMessage << endl;
         }
     }

@@ -186,7 +186,7 @@ void udpServer() {
                     string cNum = intToString(currNum + 1);
                     appendToFile(DATA_FILE, cNum + " " + getStringFromVector(1, v));
                     writeToFile(DATA_COUNT, cNum);
-                    response = cNum;
+                    response = "id " + cNum;
 
 //                    sendto(udpSocket, buf, strlen(buf), 0, (struct sockaddr *)&client, clientSize);
                 }else if(firstStr.compare("search") == 0) {
