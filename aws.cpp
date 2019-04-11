@@ -23,6 +23,8 @@
 #define QSIZE 10
 
 #define CLIENT_MONITOR_FILE ".client_monitor.txt"
+#define CLIENT_UDP_FILE ".client_udp.txt"
+
 #define CLINET_SERVER_PORT 24014
 #define MONITOR_SERVER_PORT 25014
 
@@ -130,7 +132,8 @@ void udpServer() {
         if (recvlen > 0) {
             cout << "received: " << string(buf, 0, recvlen) << endl;
             string rMessage = string(buf, 0, recvlen);
-            vector<string> v = stringToVector(rMessage);
+            writeToFile(CLIENT_UDP_FILE, rMessage);
+//            vector<string> v = stringToVector(rMessage);
             cout << rMessage << endl;
         }
     }
@@ -198,8 +201,14 @@ void clientTcpServer() {
             }else if(firstCommand.compare("search") == 0) {
                 udpClient(resMessage, SERVERA_PORT);
             }else if(firstCommand.compare("compute") == 0) {
-//                udpClient("search " + *(++v.begin()), SERVERA_PORT);
-                udpClient(resMessage, SERVERB_PORT);
+                udpClient("search " + *(++v.begin()), SERVERA_PORT);
+                string fileContent = getLineFromFile(CLIENT_UDP_FILE);
+                if(fileContent.compare("empty") != 0) {
+                    udpClient(resMessage + " " + fileContent, SERVERB_PORT);
+                }else {
+                    cout << "search error";
+                }
+
             }
             send(childSocket, receiveBuff, BUFF_SIZE + 1, 0);
             close(childSocket);
