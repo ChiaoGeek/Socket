@@ -204,6 +204,7 @@ void clientTcpServer() {
                 udpClient("search " + *(++v.begin()), SERVERA_PORT);
                 string fileContent = getLineFromFile(CLIENT_UDP_FILE);
                 if(fileContent.compare("empty") != 0) {
+                    cout << resMessage + " " + fileContent;
                     udpClient(resMessage + " " + fileContent, SERVERB_PORT);
                 }else {
                     cout << "search error";
