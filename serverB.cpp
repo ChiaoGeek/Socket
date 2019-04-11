@@ -113,15 +113,15 @@ vector<string> stringToVector(string s) {
 string calculate(string s) {
     vector<string> v = stringToVector(s);
 
-    if(v.size() != 8) {
+    if(v.size() != 9) {
         return "Error";
     }
     double size = stringToDouble(v[2]);
     double signalsize = stringToDouble(v[3]);
-    double bw = stringToDouble(v[4]);
-    double length = stringToDouble(v[5]);
-    double velocity = stringToDouble(v[6]);
-    double noisepower = stringToDouble(v[7]);
+    double bw = stringToDouble(v[5]);
+    double length = stringToDouble(v[6]);
+    double velocity = stringToDouble(v[7]);
+    double noisepower = stringToDouble(v[8]);
 
     double capacity = (log(1 + pow(10, signalsize / 10 - 3) / pow(10, noisepower / 10 - 3)) / log(2)) * (bw * pow(10, 6));
     double t_f = pow(10,3) * (size / capacity);
