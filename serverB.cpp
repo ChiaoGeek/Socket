@@ -182,21 +182,11 @@ void udpServer() {
                 string response;
                 string firstStr = *(v.begin());
                 int currNum = getCurrentNum(DATA_COUNT);
-                if(firstStr.compare("write") == 0) {
-                    string cNum = intToString(currNum + 1);
-                    appendToFile(DATA_FILE, cNum + " " + getStringFromVector(1, v));
-                    writeToFile(DATA_COUNT, cNum);
-                    response = cNum;
+                if(firstStr.compare("compute") == 0) {
+
+                    response = rMessage;
 
 //                    sendto(udpSocket, buf, strlen(buf), 0, (struct sockaddr *)&client, clientSize);
-                }else if(firstStr.compare("search") == 0) {
-                    int id = stringToInt(*(++v.begin()));
-                    if(id > currNum) {
-                        response = "empty";
-                    }else {
-                        response = getLineFromFile(id, DATA_FILE);
-                    }
-
                 }
                 udpClient(response);
 
