@@ -112,6 +112,7 @@ vector<string> stringToVector(string s) {
 
 string calculate(string s) {
     vector<string> v = stringToVector(s);
+    cout << v.size();
     if(v.size() != 7) {
         return "Error";
     }
