@@ -112,7 +112,7 @@ vector<string> stringToVector(string s) {
 
 string calculate(string s) {
     vector<string> v = stringToVector(s);
-    if(v.size() != 8) {
+    if(v.size() != 7) {
         return "Error";
     }
     double size = stringToDouble(v[1]);
