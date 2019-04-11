@@ -27,6 +27,7 @@
 #define MONITOR_SERVER_PORT 25014
 
 #define SERVERA_PORT     21014
+#define SERVERB_PORT     22014
 
 #define UDP_SERVER_PORT 23014
 #define UDP_SERVER_IP "0.0.0.0"
@@ -77,7 +78,7 @@ vector<string> stringToVector(string s) {
     return v;
 }
 
-void udpClient(string s) {
+void udpClient(string s, int prot) {
 
     // Creating socket file descriptor
 
@@ -90,7 +91,7 @@ void udpClient(string s) {
 
     sockaddr_in  servaddr;
     servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(SERVERA_PORT);
+    servaddr.sin_port = htons(prot);
     servaddr.sin_addr.s_addr = INADDR_ANY;
     socklen_t serverSize = sizeof(servaddr);
 
@@ -193,11 +194,12 @@ void clientTcpServer() {
             // for monitor
             writeToFile(CLIENT_MONITOR_FILE, resMessage);
             if(firstCommand.compare("write") == 0) {
-                udpClient(resMessage);
+                udpClient(resMessage, SERVERA_PORT);
             }else if(firstCommand.compare("search") == 0) {
-                udpClient(resMessage);
+                udpClient(resMessage, SERVERA_PORT);
             }else if(firstCommand.compare("compute") == 0) {
-                udpClient("search " + *(++v.begin()));
+//                udpClient("search " + *(++v.begin()), SERVERA_PORT);
+                udpClient(resMessage, SERVERB_PORT);
             }
             send(childSocket, receiveBuff, BUFF_SIZE + 1, 0);
             close(childSocket);

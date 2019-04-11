@@ -112,7 +112,7 @@ vector<string> stringToVector(string s) {
 
 string calculate(string s) {
     vector<string> v = stringToVector(s);
-    cout << v.size();
+
     if(v.size() != 7) {
         return "Error";
     }
@@ -160,9 +160,6 @@ string getLineFromFile(int id, string filename) {
     file.close();
     return res;
 }
-
-
-
 
 void udpClient(string s) {
 
@@ -224,15 +221,9 @@ void udpServer() {
                 string firstStr = *(v.begin());
                 int currNum = getCurrentNum(DATA_COUNT);
                 if(firstStr.compare("compute") == 0) {
-
-
                     response = calculate(rMessage);
-
-
-//                    sendto(udpSocket, buf, strlen(buf), 0, (struct sockaddr *)&client, clientSize);
                 }
                 udpClient(response);
-
             }
         }
     }
