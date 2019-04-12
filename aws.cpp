@@ -235,6 +235,7 @@ void clientTcpServer() {
                 udpClient("search " + *(++v.begin()), SERVERA_PORT);
                 string fileContent = getLineFromFile(CLIENT_UDP_FILE);
                 vector<string> v_from_file = stringToVector(fileContent);
+                cout << "size: " << v_from_file.size() << endl;
                 while(v_from_file.size() != 6 || v_from_file.size() != 1) {
                     fileContent = getLineFromFile(CLIENT_UDP_FILE);
                     v_from_file = stringToVector(fileContent);
@@ -307,9 +308,9 @@ void monitorTcpSocket() {
         // create a child process
         int pid = fork();
         if(pid == 0) {
-            if(childSocket > 0) {
-                cout << "Monitor Client connected" << endl;
-            }
+//            if(childSocket > 0) {
+//                cout << "Monitor Client connected" << endl;
+//            }
             // receive message
             while(true) {
                 char receiveBuff[BUFF_SIZE];
@@ -326,12 +327,13 @@ void monitorTcpSocket() {
                 if(message.compare("empty") != 0) {
                     clearFile(CLIENT_MONITOR_FILE);
                 }
-                if(f_w.compare("write") == 0) {
-                    cout << "The AWS received operation write from the client using TCP over port " << MONITOR_SERVER_PORT << endl;
-                }else if(f_w.compare("compute") == 0) {
-                    cout << "The AWS received operation compute from the client using TCP over port " << MONITOR_SERVER_PORT << endl;
-                }
                 send(childSocket, message.c_str(), message.size(), 0);
+
+                if(f_w.compare("write") == 0) {
+                    cout << "The AWS sent write response to the monitor using TCP over port " << MONITOR_SERVER_PORT << endl;
+                }else if(f_w.compare("compute") == 0) {
+                    cout << "The AWS sent compute response to the monitor using TCP over port " << MONITOR_SERVER_PORT << endl;
+                }
 
                 if(f_w.compare("id") == 0) {
                     cout << "The AWS sent write response to the monitor using TCP over port " << MONITOR_SERVER_PORT << endl;
