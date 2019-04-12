@@ -173,7 +173,6 @@ void udpServer() {
     for (;;) {
         int recvlen = recvfrom(udpSocket, buf, BUFF_SIZE, 0, (struct sockaddr *)&client, &clientSize);
         if (recvlen > 0) {
-            cout << "received: " << string(buf, 0, recvlen) << endl;
 
             string rMessage = string(buf, 0, recvlen);
             vector<string> v = stringToVector(rMessage);
@@ -195,7 +194,6 @@ void udpServer() {
 
                     int id = stringToInt(*(++v.begin()));
                     cout << "The Server A received input " <<  id << "for computing" << endl;
-                    cout << id << endl;
                     if(id > currNum) {
                         response = "notFound";
                         cout << "Link ID not found" << endl;
@@ -213,7 +211,6 @@ void udpServer() {
 }
 
 int main(int argc, char** argv) {
-    cout << "The udp server is up and running" << endl;
     udpServer();
 }
 

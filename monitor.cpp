@@ -57,9 +57,7 @@ void startClient()
     //while loop
     char buf[4096];
     do {
-//        cout << "stop1" << endl;
         int sendRes = send(sock, arg.c_str(), arg.size() + 1, 0);
-//        cout << "stop2" << endl;
         if(sendRes == -1)
         {
             cout << "could not send to server!";
@@ -67,9 +65,7 @@ void startClient()
 
         //wait for response
         memset(buf, 0, 4096);
-//        cout << "stop3" << endl;
         int bytesReceived = recv(sock, buf, 4096, 0);
-//        cout << "stop4" << endl;
         if (bytesReceived == -1)
         {
             cout << "there was an error getting from the server\r\n";

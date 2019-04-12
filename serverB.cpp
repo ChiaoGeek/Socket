@@ -211,7 +211,6 @@ void udpServer() {
     for (;;) {
         int recvlen = recvfrom(udpSocket, buf, BUFF_SIZE, 0, (struct sockaddr *)&client, &clientSize);
         if (recvlen > 0) {
-            cout << "received: " << string(buf, 0, recvlen) << endl;
 
             string rMessage = string(buf, 0, recvlen);
             vector<string> v = stringToVector(rMessage);
@@ -234,7 +233,6 @@ void udpServer() {
 }
 
 int main(int argc, char** argv) {
-    cout << "The udp server is up and running" << endl;
     udpServer();
 }
 
