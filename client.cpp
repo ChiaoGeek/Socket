@@ -83,6 +83,7 @@ void startClient(string arg)
         //display response
         vector<string> v_2 = stringToVector(string(buf, bytesReceived));
         string fW = v_2[0];
+        cout << string(buf, bytesReceived) << endl;
         if(fW.compare("res") == 0) {
             cout << "The delay for link "+v[1]+" is "+v_2[3]+"ms" << endl;
         }else {
