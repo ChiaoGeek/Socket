@@ -227,7 +227,7 @@ void clientTcpServer() {
                 }
                 fileContent = getLineFromFile(CLIENT_UDP_FILE);
                 v_from_file = stringToVector(fileContent);
-                while(v_from_file.size() != 5) {
+                while(v_from_file.size() != 4) {
                     fileContent = getLineFromFile(CLIENT_UDP_FILE);
                     v_from_file = stringToVector(fileContent);
                 }
