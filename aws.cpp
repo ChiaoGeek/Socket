@@ -209,6 +209,7 @@ void clientTcpServer() {
             if(firstCommand.compare("write") == 0) {
                 //cout
                 cout << "The AWS received operation write from the client using TCP over port " << CLINET_SERVER_PORT << endl;
+                clearFile(CLIENT_UDP_FILE);
                 udpClient(resMessage, SERVERA_PORT);
                 cout << "The AWS sent operation write to Backend-Server A using UDP over port " << SERVERA_PORT << endl;
                 string fileContent = getLineFromFile(CLIENT_UDP_FILE);
@@ -231,15 +232,17 @@ void clientTcpServer() {
             }else if(firstCommand.compare("search") == 0) {
                 udpClient(resMessage, SERVERA_PORT);
             }else if(firstCommand.compare("compute") == 0) {
+                clearFile(CLIENT_UDP_FILE);
                 cout << "The AWS received operation compute from the client using TCP over port " << CLINET_SERVER_PORT << endl;
                 udpClient("search " + *(++v.begin()), SERVERA_PORT);
                 string fileContent = getLineFromFile(CLIENT_UDP_FILE);
                 vector<string> v_from_file = stringToVector(fileContent);
-                cout << "size: " << v_from_file.size() << endl;
+
                 while(v_from_file.size() != 6 || v_from_file.size() != 1) {
                     fileContent = getLineFromFile(CLIENT_UDP_FILE);
                     v_from_file = stringToVector(fileContent);
                 }
+                cout << "size: " << v_from_file.size() << endl;
                 if(v_from_file.size() != 6) {
                     cout << "The AWS received link information from Backend-Server A using UDP over port " << UDP_SERVER_PORT << endl;
                     udpClient(resMessage + " " + fileContent, SERVERB_PORT);
