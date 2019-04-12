@@ -242,7 +242,7 @@ void clientTcpServer() {
                     fileContent = getLineFromFile(CLIENT_UDP_FILE);
                     v_from_file = stringToVector(fileContent);
                 }
-                cout << "size: " << v_from_file.size() << endl;
+                cout << "size: " << fileContent << endl;
                 if(v_from_file.size() == 6) {
                     cout << "The AWS received link information from Backend-Server A using UDP over port " << UDP_SERVER_PORT << endl;
                     udpClient(resMessage + " " + fileContent, SERVERB_PORT);
