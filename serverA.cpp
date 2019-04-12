@@ -169,7 +169,7 @@ void udpServer() {
     socklen_t clientSize = sizeof(client);
 
     char buf[BUFF_SIZE];     /* receive buffer */
-
+    cout << "The Server A is up and running using UDP on port " << SERVER_PORT << endl;
     for (;;) {
         int recvlen = recvfrom(udpSocket, buf, BUFF_SIZE, 0, (struct sockaddr *)&client, &clientSize);
         if (recvlen > 0) {
@@ -183,19 +183,25 @@ void udpServer() {
                 string firstStr = *(v.begin());
                 int currNum = getCurrentNum(DATA_COUNT);
                 if(firstStr.compare("write") == 0) {
+                    cout << "The Server A received input for writing" << endl;
                     string cNum = intToString(currNum + 1);
                     appendToFile(DATA_FILE, cNum + " " + getStringFromVector(1, v));
                     writeToFile(DATA_COUNT, cNum);
                     response = "id " + cNum;
+                    cout << "The Server A wrote link " + cNum + " to database" << endl;
 
 //                    sendto(udpSocket, buf, strlen(buf), 0, (struct sockaddr *)&client, clientSize);
                 }else if(firstStr.compare("search") == 0) {
+
                     int id = stringToInt(*(++v.begin()));
+                    cout << "The Server A received input " <<  id << "for computing" << endl;
                     cout << id << endl;
                     if(id > currNum) {
                         response = "notFound";
+                        cout << "Link ID not found" << endl;
                     }else {
                         response = "data " + getLineFromFile(id, DATA_FILE);
+                        cout << "The Server A finished sending the search result to AWS" << endl;
                     }
 
                 }

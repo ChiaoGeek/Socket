@@ -255,7 +255,7 @@ void clientTcpServer() {
                         v_from_file = stringToVector(fileContent);
                     }
                     responseToClient = fileContent;
-                    cout << "The AWS received outputs from Backend-Server B using UDP over port" << UDP_SERVER_PORT << endl;
+                    cout << "The AWS received outputs from Backend-Server B using UDP over port " << UDP_SERVER_PORT << endl;
 
                 }else {
                     cout << "Link ID not found" << endl;
