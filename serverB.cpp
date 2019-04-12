@@ -113,15 +113,15 @@ vector<string> stringToVector(string s) {
 string calculate(string s) {
     vector<string> v = stringToVector(s);
 
-    if(v.size() != 9) {
+    if(v.size() != 10) {
         return "Error";
     }
     double size = stringToDouble(v[2]);
     double signalsize = stringToDouble(v[3]);
-    double bw = stringToDouble(v[5]);
-    double length = stringToDouble(v[6]);
-    double velocity = stringToDouble(v[7]);
-    double noisepower = stringToDouble(v[8]);
+    double bw = stringToDouble(v[6]);
+    double length = stringToDouble(v[7]);
+    double velocity = stringToDouble(v[8]);
+    double noisepower = stringToDouble(v[9]);
 
     double capacity = (log(1 + pow(10, signalsize / 10 - 3) / pow(10, noisepower / 10 - 3)) / log(2)) * (bw * pow(10, 6));
     double t_f = pow(10,3) * (size / capacity);
@@ -217,7 +217,7 @@ void udpServer() {
             vector<string> v = stringToVector(rMessage);
 
             if(v.size() > 0) {
-                string response;
+                string response = "res ";
                 string firstStr = *(v.begin());
                 int currNum = getCurrentNum(DATA_COUNT);
                 if(firstStr.compare("compute") == 0) {

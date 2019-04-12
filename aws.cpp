@@ -133,10 +133,9 @@ void udpServer() {
             string rMessage = string(buf, 0, recvlen);
             vector<string> v = stringToVector(rMessage);
             string firstWord = *(v.begin());
-            if(firstWord.compare("id") != 0) {
-                writeToFile(CLIENT_UDP_FILE, rMessage);
-                cout << "from udp server: " + rMessage << endl;
-            }
+
+            writeToFile(CLIENT_UDP_FILE, rMessage);
+            cout << "from udp server: " + rMessage << endl;
 
         }
     }
@@ -199,15 +198,24 @@ void clientTcpServer() {
             cout << "from client server: " << resMessage << endl;
             // for monitor
             writeToFile(CLIENT_MONITOR_FILE, resMessage);
+
+            string responseToClient = "";
             if(firstCommand.compare("write") == 0) {
                 udpClient(resMessage, SERVERA_PORT);
+                string fileContent = getLineFromFile(CLIENT_UDP_FILE);
+                vector<string> v_from_file = stringToVector(fileContent);
+                while(v_from_file.size() != 2) {
+                    fileContent = getLineFromFile(CLIENT_UDP_FILE);
+                    v_from_file = stringToVector(fileContent);
+                }
+                responseToClient = *(++v_from_file.begin());
             }else if(firstCommand.compare("search") == 0) {
                 udpClient(resMessage, SERVERA_PORT);
             }else if(firstCommand.compare("compute") == 0) {
                 udpClient("search " + *(++v.begin()), SERVERA_PORT);
                 string fileContent = getLineFromFile(CLIENT_UDP_FILE);
                 vector<string> v_from_file = stringToVector(fileContent);
-                while(v_from_file.size() != 5) {
+                while(v_from_file.size() != 6) {
                     fileContent = getLineFromFile(CLIENT_UDP_FILE);
                     v_from_file = stringToVector(fileContent);
                 }
@@ -217,9 +225,16 @@ void clientTcpServer() {
                 }else {
                     cout << "search error";
                 }
+                fileContent = getLineFromFile(CLIENT_UDP_FILE);
+                v_from_file = stringToVector(fileContent);
+                while(v_from_file.size() != 5) {
+                    fileContent = getLineFromFile(CLIENT_UDP_FILE);
+                    v_from_file = stringToVector(fileContent);
+                }
+                responseToClient = fileContent;
 
             }
-            send(childSocket, receiveBuff, BUFF_SIZE + 1, 0);
+            send(childSocket, responseToClient.c_str(), responseToClient.size(), 0);
             close(childSocket);
         }
 

@@ -194,7 +194,7 @@ void udpServer() {
                     if(id > currNum) {
                         response = "empty";
                     }else {
-                        response = getLineFromFile(id, DATA_FILE);
+                        response = "data " + getLineFromFile(id, DATA_FILE);
                     }
 
                 }
