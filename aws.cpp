@@ -239,7 +239,7 @@ void clientTcpServer() {
                 string fileContent = getLineFromFile(CLIENT_UDP_FILE);
                 vector<string> v_from_file = stringToVector(fileContent);
 
-                while(v_from_file.size() != 6 && v_from_file.size() != 1 && fileContent.compare("notFound") != 0) {
+                while(v_from_file.size() != 6 || fileContent.compare("empty") == 0)) {
                     fileContent = getLineFromFile(CLIENT_UDP_FILE);
                     v_from_file = stringToVector(fileContent);
                 }
