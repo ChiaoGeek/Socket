@@ -234,6 +234,7 @@ void clientTcpServer() {
             }else if(firstCommand.compare("compute") == 0) {
                 clearFile(CLIENT_UDP_FILE);
                 cout << "The AWS received operation compute from the client using TCP over port " << CLINET_SERVER_PORT << endl;
+                cout << *(++v.begin()) << endl;
                 udpClient("search " + *(++v.begin()), SERVERA_PORT);
                 string fileContent = getLineFromFile(CLIENT_UDP_FILE);
                 vector<string> v_from_file = stringToVector(fileContent);
