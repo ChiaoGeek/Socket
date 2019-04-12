@@ -70,12 +70,11 @@ void startClient()
                 cout << "server> " << res << "\r\n";
             }
         }
-        sleep(1);
+
     }while(true);
     close(sock);
 }
 
 int main(int argc, char** argv) {
-    cout << "The monitor client is up and running" << endl;
     startClient();
 }
