@@ -221,7 +221,7 @@ void udpServer() {
                 string firstStr = *(v.begin());
                 int currNum = getCurrentNum(DATA_COUNT);
                 if(firstStr.compare("compute") == 0) {
-                    response = calculate(rMessage);
+                    response += calculate(rMessage);
                 }
                 udpClient(response);
             }
