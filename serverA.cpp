@@ -184,7 +184,7 @@ void udpServer() {
                 int currNum = getCurrentNum(DATA_COUNT);
                 if(firstStr.compare("write") == 0) {
                     string cNum = intToString(currNum + 1);
-                    appendToFile(DATA_FILE, cNum + " " + getStringFromVector(1, v));
+                    appendToFile(DATA_FILE, cNum + " " + getStringFromVector(2, v));
                     writeToFile(DATA_COUNT, cNum);
                     response = "id " + cNum;
 
