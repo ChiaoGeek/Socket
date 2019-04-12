@@ -92,7 +92,7 @@ void startClient()
                 }
             }
         }
-        usleep(10);
+
 
     }while(true);
     close(sock);
