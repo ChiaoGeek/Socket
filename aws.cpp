@@ -80,6 +80,11 @@ vector<string> stringToVector(string s) {
     return v;
 }
 
+string getNthElement(string s, int n) {
+    vector<string> v =  stringToVector(s);
+    return v[n];
+}
+
 void udpClient(string s, int prot) {
 
     // Creating socket file descriptor
@@ -169,6 +174,8 @@ void clientTcpServer() {
     if(listening < -1) {
         cerr << "Can not listen the socket" << endl;
         return;
+    }else {
+        cout << "The AWS is up and running." << endl;
     }
 
     // run the server
@@ -183,9 +190,9 @@ void clientTcpServer() {
         // create a child process
         int pid = fork();
         if(pid == 0) {
-            if(childSocket > 0) {
-                cout << "Client connected" << endl;
-            }
+//            if(childSocket > 0) {
+//                cout << "Client connected" << endl;
+//            }
             // receive message
             char receiveBuff[BUFF_SIZE];
             // send message
@@ -195,13 +202,15 @@ void clientTcpServer() {
             string resMessage = string(receiveBuff, 0, BUFF_SIZE);
             vector<string> v = stringToVector(resMessage);
             string firstCommand = *(v.begin());
-            cout << "from client server: " << resMessage << endl;
             // for monitor
             writeToFile(CLIENT_MONITOR_FILE, resMessage);
 
             string responseToClient = "";
             if(firstCommand.compare("write") == 0) {
+                //cout
+                cout << "The AWS received operation write from the client using TCP over port " << CLINET_SERVER_PORT << endl;
                 udpClient(resMessage, SERVERA_PORT);
+                cout << "The AWS sent operation write to Backend-Server A using UDP over port " << SERVERA_PORT << endl;
                 string fileContent = getLineFromFile(CLIENT_UDP_FILE);
                 vector<string> v_from_file = stringToVector(fileContent);
                 while(v_from_file.size() != 2) {
@@ -209,32 +218,47 @@ void clientTcpServer() {
                     v_from_file = stringToVector(fileContent);
                 }
                 responseToClient = *(++v_from_file.begin());
+                cout << "The AWS received response from Backend-Server A for writing using UDP over port " << UDP_SERVER_PORT << endl;
+                send(childSocket, responseToClient.c_str(), responseToClient.size(), 0);
+                cout << "The AWS sent result to client for operation write using TCP over port " << CLINET_SERVER_PORT << endl;
+
+//                if(v_from_file.size() == 2) {
+//                       }else {
+//                    responseToClient = "Link ID not found";
+//                    cout << "Link ID not found" << endl;
+//                }
+
             }else if(firstCommand.compare("search") == 0) {
                 udpClient(resMessage, SERVERA_PORT);
             }else if(firstCommand.compare("compute") == 0) {
+                cout << "The AWS received operation compute from the client using TCP over port " << CLINET_SERVER_PORT << endl;
                 udpClient("search " + *(++v.begin()), SERVERA_PORT);
                 string fileContent = getLineFromFile(CLIENT_UDP_FILE);
                 vector<string> v_from_file = stringToVector(fileContent);
-                while(v_from_file.size() != 6) {
+                while(v_from_file.size() != 6 || v_from_file.size() != 1) {
                     fileContent = getLineFromFile(CLIENT_UDP_FILE);
                     v_from_file = stringToVector(fileContent);
                 }
-                if(fileContent.compare("empty") != 0) {
-                    cout << resMessage + " " + fileContent;
+                if(v_from_file.size() != 6) {
+                    cout << "The AWS received link information from Backend-Server A using UDP over port " << UDP_SERVER_PORT << endl;
                     udpClient(resMessage + " " + fileContent, SERVERB_PORT);
-                }else {
-                    cout << "search error";
-                }
-                fileContent = getLineFromFile(CLIENT_UDP_FILE);
-                v_from_file = stringToVector(fileContent);
-                while(v_from_file.size() != 4) {
+                    cout << "The AWS sent link ID=" + getNthElement(resMessage, 1) + ", size=" + getNthElement(resMessage, 2) + ", power=" + getNthElement(resMessage, 3) + ", and link information to Backend-Server B using UDP over port " << UDP_SERVER_PORT << endl;
                     fileContent = getLineFromFile(CLIENT_UDP_FILE);
                     v_from_file = stringToVector(fileContent);
-                }
-                responseToClient = fileContent;
+                    while(v_from_file.size() != 4) {
+                        fileContent = getLineFromFile(CLIENT_UDP_FILE);
+                        v_from_file = stringToVector(fileContent);
+                    }
+                    responseToClient = fileContent;
+                    cout << "The AWS received outputs from Backend-Server B using UDP over port" << UDP_SERVER_PORT << endl;
 
+                }else {
+                    cout << "Link ID not found";
+                }
+                send(childSocket, responseToClient.c_str(), responseToClient.size(), 0);
+                cout << "The AWS sent result to client for operation compute using TCP over port " << CLINET_SERVER_PORT << endl;
             }
-            send(childSocket, responseToClient.c_str(), responseToClient.size(), 0);
+
             close(childSocket);
         }
 
@@ -295,10 +319,26 @@ void monitorTcpSocket() {
                     break;
                 }
                 string message = getLineFromFile(CLIENT_MONITOR_FILE);
+                vector<string> m_v = stringToVector(message);
+
+                string f_w = *(m_v.begin());
+
                 if(message.compare("empty") != 0) {
                     clearFile(CLIENT_MONITOR_FILE);
                 }
+                if(f_w.compare("write") == 0) {
+                    cout << "The AWS received operation write from the client using TCP over port " << MONITOR_SERVER_PORT << endl;
+                }else if(f_w.compare("compute") == 0) {
+                    cout << "The AWS received operation compute from the client using TCP over port " << MONITOR_SERVER_PORT << endl;
+                }
                 send(childSocket, message.c_str(), message.size(), 0);
+
+                if(f_w.compare("id") == 0) {
+                    cout << "The AWS sent write response to the monitor using TCP over port " << MONITOR_SERVER_PORT << endl;
+                }else if(f_w.compare("res") == 0) {
+                    cout << "The AWS sent compute response to the monitor using TCP over port " << MONITOR_SERVER_PORT << endl;
+                }
+
             }
             close(childSocket);
         }
