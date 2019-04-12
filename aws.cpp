@@ -257,7 +257,8 @@ void clientTcpServer() {
                     cout << "The AWS received outputs from Backend-Server B using UDP over port" << UDP_SERVER_PORT << endl;
 
                 }else {
-                    cout << "Link ID not found";
+                    cout << "Link ID not found" << endl;
+                    responseToClient = "Link ID not found";
                 }
                 send(childSocket, responseToClient.c_str(), responseToClient.size(), 0);
                 cout << "The AWS sent result to client for operation compute using TCP over port " << CLINET_SERVER_PORT << endl;
