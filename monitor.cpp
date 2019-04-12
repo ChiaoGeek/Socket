@@ -73,6 +73,7 @@ void startClient()
         else
         {
             //display response
+            string id = "2";
             string res = string(buf, bytesReceived);
             if(res.compare("empty") != 0) {
 
@@ -82,9 +83,10 @@ void startClient()
                 if(firstWord.compare("write") == 0) {
                     cout << "The monitor received BW = "+v[1]+", L = "+v[2]+", V = "+v[3]+" and P = "+v[4]+" from the AWS" << endl;
                 }else if(firstWord.compare("compute") == 0) {
+                    id = v[1];
                     cout << "The monitor received link ID="+v[1]+", size="+v[2]+", and power="+v[3]+" from the AWS" << endl;
                 }else if(firstWord.compare("res") == 0) {
-                    cout << "The result for link "+v[1]+": Tt = "+v[2]+"ms, Tp = <Propagation Time>ms, Delay = "+v[3]+"ms" << endl;
+                    cout << "The result for link "+id+": Tt = "+v[1]+"ms, Tp = "+v[2]+"ms, Delay = "+v[3]+"ms" << endl;
                 }else if(firstWord.compare("id") == 0) {
                     cout << "The write operation has been completed successfully" << endl;
                 }else if(firstWord.compare("notFound") == 0) {
