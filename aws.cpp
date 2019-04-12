@@ -143,7 +143,6 @@ void udpServer() {
             writeToFile(CLIENT_UDP_FILE, rMessage);
             usleep(500);
             writeToFile(CLIENT_MONITOR_FILE, rMessage);
-            cout << "from udp server: " + rMessage << endl;
 
         }
     }

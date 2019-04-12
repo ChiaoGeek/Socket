@@ -193,7 +193,7 @@ void udpServer() {
                 }else if(firstStr.compare("search") == 0) {
 
                     int id = stringToInt(*(++v.begin()));
-                    cout << "The Server A received input " <<  id << "for computing" << endl;
+                    cout << "The Server A received input " <<  id << " for computing" << endl;
                     if(id > currNum) {
                         response = "notFound";
                         cout << "Link ID not found" << endl;
