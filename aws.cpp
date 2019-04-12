@@ -206,6 +206,11 @@ void clientTcpServer() {
             }else if(firstCommand.compare("compute") == 0) {
                 udpClient("search " + *(++v.begin()), SERVERA_PORT);
                 string fileContent = getLineFromFile(CLIENT_UDP_FILE);
+                vector<string> v_from_file = stringToVector(fileContent);
+                while(v_from_file.size() != 5) {
+                    fileContent = getLineFromFile(CLIENT_UDP_FILE);
+                    v_from_file = stringToVector(fileContent);
+                }
                 if(fileContent.compare("empty") != 0) {
                     cout << resMessage + " " + fileContent;
                     udpClient(resMessage + " " + fileContent, SERVERB_PORT);
