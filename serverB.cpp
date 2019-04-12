@@ -207,7 +207,7 @@ void udpServer() {
     socklen_t clientSize = sizeof(client);
 
     char buf[BUFF_SIZE];     /* receive buffer */
-
+    cout << "The Server B is up and running using UDP on port " + intToString(SERVER_PORT)+ "." << endl;
     for (;;) {
         int recvlen = recvfrom(udpSocket, buf, BUFF_SIZE, 0, (struct sockaddr *)&client, &clientSize);
         if (recvlen > 0) {
@@ -216,6 +216,8 @@ void udpServer() {
             string rMessage = string(buf, 0, recvlen);
             vector<string> v = stringToVector(rMessage);
 
+            cout << "The Server B received link information: link "+ v[1] +", file size "+ v[2] +", and signal power "+ v[2] << endl;
+
             if(v.size() > 0) {
                 string response = "res ";
                 string firstStr = *(v.begin());
@@ -223,7 +225,9 @@ void udpServer() {
                 if(firstStr.compare("compute") == 0) {
                     response += calculate(rMessage);
                 }
+                cout << "The Server B finished the calculation for link " << v[1] << endl;
                 udpClient(response);
+                cout << "The Server B finished sending the output to AWS" << endl;
             }
         }
     }

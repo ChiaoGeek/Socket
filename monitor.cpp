@@ -41,6 +41,7 @@ void startClient()
         return;
     }
     string arg = "send";
+    cout << "The monitor is up and running." << endl;
     //while loop
     char buf[4096];
     do {

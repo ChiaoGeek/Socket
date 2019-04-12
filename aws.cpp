@@ -140,6 +140,7 @@ void udpServer() {
             string firstWord = *(v.begin());
 
             writeToFile(CLIENT_UDP_FILE, rMessage);
+            writeToFile(CLIENT_MONITOR_FILE, rMessage);
             cout << "from udp server: " + rMessage << endl;
 
         }
