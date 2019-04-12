@@ -6,13 +6,27 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <string>
+#include <sstream>
 
+#include <vector>
 
 
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 24014
 
 using namespace std;
+
+
+vector<string> stringToVector(string s) {
+    stringstream ss(s);
+    string b;
+    vector<string> v;
+    while(ss >> b) {
+        v.push_back(b);
+    }
+    return v;
+}
+
 
 void startClient(string arg)
 {
@@ -40,9 +54,18 @@ void startClient(string arg)
 
     //while loop
     char buf[4096];
+    cout << "The client is up and running" << endl;
 
     //send to server
+    vector<string> v = stringToVector(arg);
     int sendRes = send(sock, arg.c_str(), arg.size() + 1, 0);
+    string firstWord = v[0];
+    if(firstWord.compare("write") == 0) {
+        cout << "The client sent write operation to AWS" << endl;
+    }else if(firstWord.compare("compute") == 0) {
+        cout << "The client sent ID="+v[1]+", size="+v[2]+", and power="+v[3]+" to AWS" << endl;
+    }
+
     if(sendRes == -1)
     {
         cout << "could not send to server!";
@@ -58,7 +81,14 @@ void startClient(string arg)
     else
     {
         //display response
-        cout << "server> " << string(buf, bytesReceived) << "\r\n";
+        vector<string> v_2 = stringToVector(string(buf, bytesReceived));
+        string fW = v_2[0];
+        if(fW.compare("res") == 0) {
+            cout << "The delay for link "+v[1]+" is "+v_2[3]+"ms" << endl;
+        }else {
+            cout << "The write operation has been completed successfully" << endl;
+        }
+
     }
 
     //close the socket
