@@ -88,7 +88,7 @@ void startClient()
                 }else if(firstWord.compare("compute") == 0) {
                     cout << "The monitor received link ID="+v[1]+", size="+v[2]+", and power="+v[3]+" from the AWS" << endl;
                 }else if(firstWord.compare("res") == 0) {
-                    cout << "The monitor received link ID="+v[1]+", size="+v[2]+", and power="+v[3]+" from the AWS" << endl;
+                    cout << "The result for link "+v[1]+": Tt = "+v[2]+"ms, Tp = <Propagation Time>ms, Delay = "+v[3]+"ms" << endl;
                 }else if(firstWord.compare("id") == 0) {
                     cout << "The write operation has been completed successfully" << endl;
                 }else if(firstWord.compare("notFound") == 0) {

@@ -50,6 +50,11 @@ bool isEmpty(string filename){
     file.close();
     return res;
 }
+void clearFile(string filename) {
+    ofstream myfile;
+    myfile.open(filename.c_str(), std::ofstream::out | std::ofstream::trunc);
+    myfile.close();
+}
 
 string getLineFromFile(string filename) {
     string res;
@@ -64,11 +69,7 @@ string getLineFromFile(string filename) {
     return res;
 }
 
-void clearFile(string filename) {
-    ofstream myfile;
-    myfile.open(filename.c_str(), std::ofstream::out | std::ofstream::trunc);
-    myfile.close();
-}
+
 
 vector<string> stringToVector(string s) {
     stringstream ss(s);
