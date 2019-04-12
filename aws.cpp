@@ -136,8 +136,9 @@ void udpServer() {
             string firstWord = *(v.begin());
             if(firstWord.compare("id") != 0) {
                 writeToFile(CLIENT_UDP_FILE, rMessage);
+                cout << "from udp server: "rMessage << endl;
             }
-            cout << rMessage << endl;
+
         }
     }
 }
