@@ -87,6 +87,7 @@ void startClient(string arg)
         if(fW.compare("res") == 0) {
             cout << "The delay for link "+v[1]+" is "+v_2[3]+"ms" << endl;
         }else {
+            cout << string(buf, bytesReceived) << endl;
             cout << "The write operation has been completed successfully" << endl;
         }
 
