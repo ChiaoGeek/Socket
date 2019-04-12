@@ -193,7 +193,7 @@ void udpServer() {
                     int id = stringToInt(*(++v.begin()));
                     cout << id << endl;
                     if(id > currNum) {
-                        response = "empty";
+                        response = "notFound";
                     }else {
                         response = "data " + getLineFromFile(id, DATA_FILE);
                     }
