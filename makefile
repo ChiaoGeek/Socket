@@ -1,26 +1,20 @@
-all: serverA.cpp  serverB.cpp  client.cpp  aws.cpp monitor.cpp
-	g++ -o serverA serverA.cpp
-	g++ -o serverB serverB.cpp
-	g++ -o client client.cpp
-	g++ -o aws aws.cpp
-	g++ -o monitor monitor.cpp
-	
-serverA: serverA.cpp
-	g++ -o serverA serverA.cpp
+all: serverA.o aws.o monitor.o serverB.o
+	g++ -g serverA.cpp -o serverA
+	g++ -g aws.cpp -o aws
+	g++ -g monitor.cpp -o monitor
+	g++ -g serverB.cpp -o serverB
+	g++ -g client.cpp -o client
 
-serverB: serverB.cpp
-	g++ -o serverB serverB.cpp
+.PHONY: serverB serverA aws monitor
 
-client: client.cpp
-	g++ -o client client.cpp
+serverB:
+	./serverB
 
-aws: aws.cpp
-	g++ -o aws aws.cpp
+serverA:
+	./serverA
 
-monitor: monitor.cpp
-	g++ -o monitor monitor.cpp
+aws:
+	./aws
 
-
-clean:
-	$(RM) client serverA serverB client aws monitor
-
+monitor:
+	./monitor
