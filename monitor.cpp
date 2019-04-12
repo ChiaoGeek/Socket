@@ -56,6 +56,7 @@ void startClient()
     cout << "The monitor is up and running." << endl;
     //while loop
     char buf[4096];
+    string id = "2";
     do {
         int sendRes = send(sock, arg.c_str(), arg.size() + 1, 0);
         if(sendRes == -1)
@@ -73,7 +74,7 @@ void startClient()
         else
         {
             //display response
-            string id = "2";
+
             string res = string(buf, bytesReceived);
             if(res.compare("empty") != 0) {
 
