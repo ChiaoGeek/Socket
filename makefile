@@ -4,7 +4,6 @@ all: serverA.cpp  serverB.cpp  client.cpp  aws.cpp monitor.cpp
 	g++ -o client client.cpp
 	g++ -o aws aws.cpp
 	g++ -o monitor monitor.cpp
-	g++ -o udpclient udpclient.cpp
 	
 serverA: serverA.cpp
 	g++ -o serverA serverA.cpp
@@ -23,5 +22,5 @@ monitor: monitor.cpp
 
 
 clean:
-	$(RM) client serverA serverB client aws monitor udpclient
+	$(RM) client serverA serverB client aws monitor
 
