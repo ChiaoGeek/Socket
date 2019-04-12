@@ -70,6 +70,7 @@ void startClient()
                 cout << "server> " << res << "\r\n";
             }
         }
+        sleep(1);
 
     }while(true);
     close(sock);
