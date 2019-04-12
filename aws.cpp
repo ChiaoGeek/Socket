@@ -130,7 +130,6 @@ void udpServer() {
     for (;;) {
         int recvlen = recvfrom(udpSocket, buf, BUFF_SIZE, 0, (struct sockaddr *)&client, &clientSize);
         if (recvlen > 0) {
-            cout << "received: " << string(buf, 0, recvlen) << endl;
             string rMessage = string(buf, 0, recvlen);
             vector<string> v = stringToVector(rMessage);
             string firstWord = *(v.begin());
@@ -197,7 +196,7 @@ void clientTcpServer() {
             string resMessage = string(receiveBuff, 0, BUFF_SIZE);
             vector<string> v = stringToVector(resMessage);
             string firstCommand = *(v.begin());
-            cout << "received: " << resMessage << endl;
+            cout << "from client server: " << resMessage << endl;
             // for monitor
             writeToFile(CLIENT_MONITOR_FILE, resMessage);
             if(firstCommand.compare("write") == 0) {
