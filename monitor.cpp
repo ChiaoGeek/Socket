@@ -8,6 +8,8 @@
 #include <string>
 #include <fstream>
 #include <ostream>
+#include <vector>
+#include <sstream>
 
 
 #define SERVER_IP "127.0.0.1"
@@ -16,6 +18,16 @@
 using namespace std;
 
 
+
+vector<string> stringToVector(string s) {
+    stringstream ss(s);
+    string b;
+    vector<string> v;
+    while(ss >> b) {
+        v.push_back(b);
+    }
+    return v;
+}
 
 void startClient()
 {
@@ -67,7 +79,21 @@ void startClient()
             //display response
             string res = string(buf, bytesReceived);
             if(res.compare("empty") != 0) {
-                cout << "server> " << res << "\r\n";
+
+                vector<string> v = stringToVector(res);
+                string firstWord = v[0];
+
+                if(firstWord.compare("write") == 0) {
+                    cout << "The monitor received BW = "+v[1]+", L = "+v[2]+", V = "+v[3]+" and P = "+v[4]+" from the AWS" << endl;
+                }else if(firstWord.compare("compute") == 0) {
+                    cout << "The monitor received link ID="+v[1]+", size="+v[2]+", and power="+v[3]+" from the AWS" << endl;
+                }else if(firstWord.compare("res") == 0) {
+                    cout << "The monitor received link ID="+v[1]+", size="+v[2]+", and power="+v[3]+" from the AWS" << endl;
+                }else if(firstWord.compare("id") == 0) {
+                    cout << "The write operation has been completed successfully" << endl;
+                }else if(firstWord.compare("notFound") == 0) {
+                    cout << "Link ID not found" << endl;
+                }
             }
         }
         usleep(100);
